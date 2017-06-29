@@ -12,7 +12,7 @@ When a notification fires, it uses the following workflow:
 
 1. Plugin registers associated actions, conditions and events using `registerNotificationRules`
 1. A notification class is bound to a system event using `Notifier::bindEvent`
-1. A traditional event is fired `Event::fire`
+1. A system event is fired `Event::fire`
 1. The parameters of the event are captured, along with any context parameters
 1. A command is pushed on the queue to process the notification `Queue::push`
 1. The command finds all notification rules using the notification class and triggers them
@@ -219,3 +219,63 @@ A form fields definition file is used to provide form fields when the condition 
             options:
                 true: True
                 false: False
+
+## Model attribute condition classes
+
+Model attribute conditions are designed specially for applying conditions to sets of model attributes.
+
+    class UserAttributeCondition extends \RainLab\Notify\Classes\ModelAttributesConditionBase
+    {
+        protected $modelClass = \RainLab\User\Models\User::class;
+
+        public function getGroupingTitle()
+        {
+            return 'User attribute';
+        }
+
+        public function getTitle()
+        {
+            return 'User attribute';
+        }
+
+        /**
+         * Checks whether the condition is TRUE for specified parameters
+         * @param array $params Specifies a list of parameters as an associative array.
+         * @return bool
+         */
+        public function isTrue(&$params)
+        {
+            $hostObj = $this->host;
+
+            $attribute = $hostObj->subcondition;
+
+            if (!$user = array_get($params, 'user')) {
+                throw new ApplicationException('Error evaluating the user attribute condition: the user object is not found in the condition parameters.');
+            }
+
+            return parent::evalIsTrue($user);
+        }
+    }
+
+An attributes definition file is used to specify which attributes should be included in the condition.
+
+    # ===================================
+    #  Condition Attribute Definitions
+    # ===================================
+
+    attributes:
+
+        name:
+            label: Name
+
+        email:
+            label: Email address
+
+        country:
+            label: Country
+            type: relation
+            relation:
+                model: RainLab\Location\Models\Country
+                label: Name
+                nameFrom: name
+                keyFrom: id

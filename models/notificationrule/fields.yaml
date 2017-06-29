@@ -33,6 +33,7 @@ tabs:
             label: Active
             type: checkbox
             tab: Settings
+            default: true
 
         description:
             label: Description
