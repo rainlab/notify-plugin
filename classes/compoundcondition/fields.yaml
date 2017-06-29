@@ -1,0 +1,14 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    condition_type:
+        label: Condition type
+        span: auto
+        type: dropdown
+
+    condition:
+        label: Required value
+        span: auto
+        type: dropdown

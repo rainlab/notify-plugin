@@ -1,0 +1,46 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    name:
+        label: Name
+        placeholder: New notification rule name
+        attributes:
+            autofocus: 1
+
+    toolbar:
+        type: partial
+        path: form_toolbar
+        cssClass: collapse-visible
+
+tabs:
+    stretch: true
+    cssClass: master-area
+    paneCssClass:
+        'Actions': 'pane-compact'
+
+    fields:
+        rule_actions:
+            type: RainLab\Notify\FormWidgets\ActionBuilder
+            tab: Actions
+
+        rule_conditions:
+            type: RainLab\Notify\FormWidgets\ConditionBuilder
+            tab: Conditions
+
+        is_enabled:
+            label: Active
+            type: checkbox
+            tab: Settings
+
+        description:
+            label: Description
+            type: textarea
+            size: tiny
+            tab: Settings
+
+        code:
+            label: API Code
+            span: auto
+            tab: Settings

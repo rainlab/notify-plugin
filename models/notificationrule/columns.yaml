@@ -1,0 +1,13 @@
+# ===================================
+#  Column Definitions
+# ===================================
+
+columns:
+
+    name:
+        label: rainlab.notify::lang.notifications.name
+        searchable: true
+
+    code:
+        label: rainlab.notify::lang.notifications.code
+        searchable: true

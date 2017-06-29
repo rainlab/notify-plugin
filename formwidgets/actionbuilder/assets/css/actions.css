@@ -1,0 +1,226 @@
+.action-set {
+  margin-top: 10px;
+}
+.action-set ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.action-set ol > li {
+  -webkit-transition: width 1s;
+  transition: width 1s;
+}
+.action-set ol > li > div {
+  font-size: 14px;
+  font-weight: normal;
+  position: relative;
+}
+.action-set ol > li > div > a,
+.action-set ol > li > div div.content {
+  color: #2b3e50;
+  padding: 10px 45px 10px 91px;
+  display: block;
+  line-height: 150%;
+  text-decoration: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.action-set ol > li > div span.icon {
+  display: block;
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  left: 20px;
+  top: 15px;
+  text-align: center;
+  font-weight: 500;
+  line-height: 22px;
+  color: #999;
+}
+.action-set ol > li > div span.icon > i {
+  line-height: 22px;
+  font-weight: normal;
+  font-size: 22px;
+  color: #999;
+}
+.action-set ol > li > div:not(.no-hover):hover,
+.action-set ol > li > div.popover-highlight {
+  background-color: #4ea5e0 !important;
+}
+.action-set ol > li > div:not(.no-hover):hover span.icon > i,
+.action-set ol > li > div.popover-highlight span.icon > i {
+  color: #fff !important;
+}
+.action-set ol > li > div:not(.no-hover):hover > a,
+.action-set ol > li > div.popover-highlight > a {
+  color: #ffffff !important;
+}
+.action-set ol > li > div:not(.no-hover):hover:before,
+.action-set ol > li > div.popover-highlight:before {
+  background-position: 0px -80px;
+}
+.action-set ol > li > div:not(.no-hover):hover:after,
+.action-set ol > li > div.popover-highlight:after {
+  top: 0 !important;
+  bottom: 0 !important;
+}
+.action-set ol > li > div:not(.no-hover):hover span,
+.action-set ol > li > div.popover-highlight span {
+  color: #ffffff !important;
+}
+.action-set ol > li > div:not(.no-hover):hover span.drag-handle,
+.action-set ol > li > div.popover-highlight span.drag-handle {
+  cursor: move;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.action-set ol > li > div:not(.no-hover):active {
+  background-color: #3498db !important;
+}
+.action-set ol > li > div:not(.no-hover):active > a {
+  color: #ffffff !important;
+}
+.action-set ol > li > div span.icon:first-child {
+  font-size: 11px;
+  color: #ccc;
+}
+.action-set ol > li > div span.icon:first-child > i {
+  color: #ccc;
+  font-size: 15px;
+}
+.action-set ol > li > div span.icon:last-child {
+  left: 52px;
+}
+.action-set ol > li > div span.comment {
+  display: block;
+  font-weight: 400;
+  color: #95a5a6;
+  font-size: 13px;
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.action-set ol > li > div > .subpanel {
+  right: 0;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 200;
+  padding: 0 20px;
+}
+.action-set ol > li > div > ul.submenu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 0;
+  list-style: none;
+  z-index: 200;
+  height: 100%;
+  display: none;
+  margin: 0;
+  font-size: 0;
+}
+.action-set ol > li > div > ul.submenu li {
+  font-size: 12px;
+  height: 100%;
+  display: inline-block;
+  background: #2581b8;
+  border-right: 1px solid #328ec8;
+}
+.action-set ol > li > div > ul.submenu li p {
+  display: table;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+.action-set ol > li > div > ul.submenu li p a {
+  display: table-cell;
+  vertical-align: middle;
+  height: 100%;
+  padding: 0 20px;
+  font-size: 13px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  color: #ffffff;
+}
+.action-set ol > li > div > ul.submenu li p a i.control-icon {
+  font-size: 22px;
+}
+.action-set ol > li > div:hover > ul.submenu {
+  display: block;
+}
+.action-set ol > li > div .checkbox {
+  position: absolute;
+  top: -2px;
+  right: 0;
+}
+.action-set ol > li > div .checkbox label {
+  margin-right: 0;
+}
+.action-set ol > li > div .checkbox label:before {
+  border-color: #cccccc;
+}
+.action-set ol > li > div.popover-highlight {
+  background-color: #4ea5e0 !important;
+}
+.action-set ol > li > div.popover-highlight:before {
+  background-position: 0px -80px;
+}
+.action-set ol > li > div.popover-highlight > a {
+  color: #ffffff !important;
+  cursor: default;
+}
+.action-set ol > li > div.popover-highlight span {
+  color: #ffffff !important;
+}
+.action-set ol > li > div.popover-highlight > ul.submenu,
+.action-set ol > li > div.popover-highlight > span.drag-handle {
+  display: none !important;
+}
+.action-set ol > li.active > div {
+  background: #dddddd;
+}
+.action-set ol > li.active > div:after {
+  position: absolute;
+  width: 4px;
+  left: 0;
+  top: -1px;
+  bottom: -1px;
+  background: #e67e22;
+  display: block;
+  content: ' ';
+}
+.action-set ol > li.active > div > span.comment,
+.action-set ol > li.active > div > span.expand {
+  color: #8f8f8f;
+}
+.action-set a.menu-control {
+  display: block;
+  margin: 20px;
+  padding: 13px 15px;
+  border: dotted 2px #ebebeb;
+  color: #bdc3c7;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 5px;
+  vertical-align: middle;
+}
+.action-set a.menu-control:hover,
+.action-set a.menu-control:focus {
+  text-decoration: none;
+  background-color: #4ea5e0;
+  color: #ffffff;
+  border: none;
+  padding: 15px 17px;
+}
+.action-set a.menu-control:active {
+  background: #3498db;
+  color: #ffffff;
+}
+.action-set a.menu-control i {
+  margin-right: 10px;
+  font-size: 14px;
+}

@@ -1,0 +1,64 @@
+<?= Form::open(['id' => 'propertyForm']) ?>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="popup">&times;</button>
+        <h4 class="modal-title">
+            <?php if (!$this->fatalError): ?>
+                <?= e($action->getTitle()) ?>
+            <?php else: ?>
+                Action
+            <?php endif ?>
+        </h4>
+    </div>
+
+    <?php if (!$this->fatalError): ?>
+
+        <input type="hidden" name="current_action_id" value="<?= $action->id ?>" />
+        <input type="hidden" name="current_action_data" value="<?= e(json_encode($this->getCacheActionDataPayload())) ?>" />
+
+        <div class="modal-body">
+            <?= $actionFormWidget->render() ?>
+        </div>
+        <div class="modal-footer">
+            <button
+                class="btn btn-primary"
+                data-request="<?= $this->getEventHandler('onSaveAction') ?>"
+                data-hotkey="ctrl+s, cmd+s"
+                data-popup-load-indicator
+                class="btn btn-primary">
+                <u>S</u>ave
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.cancel')) ?>
+            </button>
+
+            <button
+                type="button"
+                class="oc-icon-trash-o btn-icon danger pull-left"
+                data-request="<?= $this->getEventHandler('onDeleteAction') ?>"
+                data-popup-load-indicator
+                data-request-confirm="Do you really want to delete this action?">
+            </button>
+        </div>
+
+    <?php else: ?>
+
+        <div class="modal-body">
+            <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
+        </div>
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.close')) ?>
+            </button>
+        </div>
+
+    <?php endif ?>
+
+<?php Form::close() ?>

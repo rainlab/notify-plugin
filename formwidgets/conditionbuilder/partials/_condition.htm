@@ -1,0 +1,99 @@
+<?php
+    $isCompound = $condition->isCompound();
+    $isRoot = $treeLevel == 0;
+    $collapsed = $this->getCollapseStatus($condition->id, false);
+?>
+<li
+    id="<?= 'condition'.$condition->id ?>"
+    data-condition-id="<?= $condition->id ?>"
+    class="condition-item <?= $isCompound ? 'is-compound' : 'is-single' ?> <?= $isRoot ? 'is-root' : 'is-inner' ?> <?= $collapsed ? 'collapsed' : null ?>">
+
+    <?php if ($isCompound): ?>
+
+        <div class="compound-content">
+            <h4>
+                <a
+                    class="condition-collapse"
+                    href="javascript:;"
+                    title="Collapse / Expand"
+                    data-conditions-collapse>
+                    <i class="icon-chevron-up"></i>
+                </a>
+
+                <a
+                    href="javascript:;"
+                    class="condition-text"
+                    data-conditions-settings>
+                    <?= e($this->getCacheConditionText($condition)) ?>
+                </a>
+                <?php if (!$isRoot): ?>
+                    <a
+                        href="javascript:;"
+                        title="Delete condition"
+                        class="condition-delete condition-delete-compound close"
+                        data-conditions-delete>
+                        <span aria-hidden="true">&times;</span>
+                    </a>
+                <?php endif ?>
+            </h4>
+            <ul class="condition-set">
+                <?php
+                    $children = $condition->children()->withDeferred($this->sessionKey.'_'.$condition->id)->get();
+                    $lastIndex = $children->count() - 1;
+                ?>
+                <?php foreach ($children as $index => $childCondition): ?>
+                    <?= $this->makePartial('condition', [
+                        'condition' => $childCondition,
+                        'treeLevel' => $treeLevel + 1,
+                        'parentCondition' => $condition
+                    ]) ?>
+                    <?php if ($index < $lastIndex): ?>
+                        <li class="compound-join">
+                            <a href="javascript:;" data-conditions-settings>
+                                <?= e($this->getCacheConditionJoinText($condition)) ?>
+                            </a>
+                        </li>
+                    <?php endif ?>
+                <?php endforeach?>
+            </ul>
+        </div>
+
+        <div class="compound-add-item loading-indicator-container indicator-center">
+            <a
+                href="javascript:;"
+                data-conditions-create
+                data-request="onLoadConditionChildSelector">
+                Add condition
+            </a>
+        </div>
+
+    <?php else: ?>
+
+        <div class="condition-text">
+            <a href="javascript:;" data-conditions-settings>
+                <?= $this->getCacheConditionText($condition) ?>
+            </a>
+        </div>
+        <a
+            href="javascript:;"
+            title="Delete condition"
+            class="condition-delete close"
+            data-conditions-delete>
+            <span aria-hidden="true">&times;</span>
+        </a>
+
+    <?php endif ?>
+
+    <input
+        type="hidden"
+        name="condition_data[<?= $condition->id ?>]"
+        value="<?= e(json_encode($this->getCacheConditionData($condition))) ?>" />
+
+    <?php if (isset($parentCondition)): ?>
+        <input
+            type="hidden"
+            name="condition_parent_id[<?= $condition->id ?>]"
+            value="<?= $parentCondition->id ?>" />
+    <?php endif ?>
+
+</li>

@@ -1,0 +1,83 @@
+<?php
+    $attribute = $formModel->subcondition;
+    $controlType = $formModel->getValueControlType();
+?>
+<?php if ($controlType == 'text'): ?>
+
+    <input
+        type="text"
+        name="<?= $field->getName() ?>"
+        id="<?= $field->getId() ?>"
+        value="<?= e($field->value) ?>"
+        class="form-control"
+        autocomplete="off"
+        maxlength="255"
+    />
+
+<?php elseif ($controlType == 'dropdown'): ?>
+    <?php
+        $fieldOptions = $formModel->getValueDropdownOptions();
+    ?>
+    <select
+        id="<?= $field->getId() ?>"
+        name="<?= $field->getName() ?>"
+        class="form-control custom-select">
+        <?php foreach ($fieldOptions as $value => $option): ?>
+            <option
+                <?= $field->isSelected($value) ? 'selected="selected"' : '' ?>
+                value="<?= $value ?>"><?= e(trans($option)) ?></option>
+        <?php endforeach ?>
+    </select>
+
+<?php elseif ($controlType == 'multi_value'): ?>
+
+    <div class="filter-list">
+        <?= $searchWidget->render() ?>
+        <?= $listWidget->render() ?>
+    </div>
+
+    <?php
+        $referenceInfo = $formModel->prepareReferenceListInfo();
+        $selectedRecords = $formModel->listSelectedReferenceRecords();
+    ?>
+
+    <label>Selected Records</label>
+    <div class="added-filter-list control-list">
+        <table class="table data" data-control="rowlink">
+            <tbody>
+                <?php if ($selectedRecords->count()): ?>
+                    <?php foreach ($selectedRecords as $record): ?>
+                        <tr>
+                            <td style="width: 10px">
+                                <a href="#">
+                                    <span class="list-badge badge-default">
+                                        <i class="icon-minus"></i>
+                                    </span>
+                                </a>
+                            </td>
+                            <td>
+                                <?= e($record->{$referenceInfo->primaryColumn}) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php else: ?>
+                    <tr class="no-data">
+                        <td colspan="100" class="nolink">
+                            <p class="no-data">
+                                No records added
+                            </p>
+                        </td>
+                    </tr>
+                <?php endif ?>
+            </tbody>
+        </table>
+    </div>
+
+    <input
+        type="hidden"
+        name="<?= $field->getName() ?>"
+        id="<?= $field->getId() ?>"
+        value="<?= e($field->value) ?>"
+    />
+
+<?php endif ?>

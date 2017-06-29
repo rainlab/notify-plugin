@@ -1,0 +1,67 @@
+<?= Form::open(['id' => 'propertyForm']) ?>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="popup">&times;</button>
+        <h4 class="modal-title">Condition</h4>
+    </div>
+
+    <?php if (!$this->fatalError): ?>
+
+        <input type="hidden" name="current_condition_id" value="<?= $condition->id ?>"/>
+        <input type="hidden" name="current_condition_data" value="<?= e(json_encode($this->getCacheConditionDataPayload())) ?>" />
+
+        <div class="modal-body">
+            <div class="form-group condition-class">
+                <label>Condition</label>
+                <select
+                    class="form-control custom-select"
+                    data-placeholder="Please select a condition"
+                    name="condition_class">
+                    <option value=""></option>
+                    <?php foreach ($options as $name => $class): ?>
+                        <?php if (!is_array($class)): ?>
+                            <option value="<?= $class ?>"><?= e($name) ?></option>
+                        <?php else: ?>
+                            <optgroup label="<?= e($name) ?>">
+                                <?php foreach ($class as $subName => $subClass): ?>
+                                    <option value="<?= $subClass ?>"><?= e($subName) ?></option>
+                                <?php endforeach ?>
+                            </optgroup>
+                        <?php endif ?>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button
+                class="btn btn-primary"
+                data-request="<?= $this->getEventHandler('onCreateCondition') ?>"
+                data-popup-load-indicator
+                class="btn btn-primary">
+                Create
+            </button>
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.cancel')) ?>
+            </button>
+        </div>
+
+    <?php else: ?>
+
+        <div class="modal-body">
+            <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
+        </div>
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.close')) ?>
+            </button>
+        </div>
+
+    <?php endif ?>
+
+<?= Form::close() ?>

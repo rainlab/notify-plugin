@@ -1,0 +1,20 @@
+# ===================================
+#  List Behavior Config
+# ===================================
+
+title: rainlab.notify::lang.notifications.menu_label
+list: $/rainlab/notify/models/notificationrule/columns.yaml
+modelClass: RainLab\Notify\Models\NotificationRule
+recordUrl: rainlab/notify/notifications/update/:id
+noRecordsMessage: backend::lang.list.no_records
+recordsPerPage: 30
+showSetup: true
+showCheckboxes: true
+defaultSort:
+    column: count
+    direction: desc
+
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: backend::lang.list.search_prompt

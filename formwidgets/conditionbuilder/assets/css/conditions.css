@@ -1,0 +1,216 @@
+.condition-filter-search {
+  background-position: right -81px !important;
+  border-top: none  !important;
+  border-left: none  !important;
+  border-right: none  !important;
+  border-radius: 0;
+}
+ul.condition-set {
+  padding: 5px 0 0;
+  margin: 0;
+  list-style: none;
+}
+ul.condition-set ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+ul.condition-set li {
+  margin: 0;
+  padding: 0;
+}
+ul.condition-set .condition-item {
+  border-radius: 4px;
+}
+ul.condition-set .condition-item.is-root {
+  border-radius: 0;
+}
+ul.condition-set .condition-item.collapsed .compound-content {
+  border-left-color: transparent !important;
+}
+ul.condition-set .condition-item.collapsed .condition-set {
+  display: none;
+}
+ul.condition-set .condition-item.collapsed.is-inner .compound-add-item {
+  display: none;
+}
+ul.condition-set .condition-item .condition-delete {
+  position: absolute;
+  display: block;
+  width: 10px;
+  height: 10px;
+  right: 7px;
+  top: 7px;
+}
+ul.condition-set a.condition-collapse {
+  text-decoration: none;
+  display: block;
+  position: absolute;
+  right: 8px;
+  top: 2px;
+}
+ul.condition-set a.condition-collapse > i {
+  -webkit-transition: transform 0.3s;
+  transition: transform 0.3s;
+  width: 15px;
+  height: 15px;
+  color: #bdc3c7;
+  font-size: 12px;
+  display: block;
+}
+ul.condition-set a.condition-collapse:hover > i {
+  color: #999;
+}
+ul.condition-set li.collapsed a.condition-collapse > i {
+  -webkit-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1);
+}
+ul.condition-set .compound-join {
+  text-align: center;
+  padding: 3px 0 2px 0;
+}
+ul.condition-set .compound-join a {
+  color: #333333;
+  text-decoration: none;
+}
+ul.condition-set .compound-join a:hover {
+  text-decoration: underline;
+}
+ul.condition-set .condition-item.is-single {
+  padding: 8px 20px 9px 24px;
+  background: #fff;
+  border: 1px solid #eee;
+  position: relative;
+}
+ul.condition-set .condition-item.is-single:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+  content: "\f126";
+  line-height: 100%;
+  font-size: 16px;
+  color: #bdc3c7;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: 12px;
+  top: 11px;
+}
+ul.condition-set .condition-item.is-single .condition-text {
+  padding-left: 10px;
+}
+ul.condition-set .condition-item.is-single .condition-text a {
+  color: #333333;
+  text-decoration: none;
+}
+ul.condition-set .condition-item.is-single .condition-text a:hover {
+  text-decoration: underline;
+}
+ul.condition-set .condition-item.is-single .condition-text a span.operator {
+  font-weight: 500;
+}
+ul.condition-set .condition-item.is-single a.condition-delete {
+  right: 12px;
+  top: 9px;
+}
+ul.condition-set .condition-item.is-compound .compound-content {
+  position: relative;
+  border-left: 1px solid #dbdee0;
+  margin-left: 5px;
+}
+ul.condition-set .condition-item.is-compound .compound-content:before {
+  color: #bdc3c7;
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+  content: "\f111";
+  font-size: 8px;
+  position: absolute;
+  left: -4px;
+  top: -2px;
+}
+ul.condition-set .condition-item.is-compound .compound-content h4 {
+  padding: 0 30px 5px 5px;
+  margin: 0;
+  position: relative;
+  top: -5px;
+  font-size: 13px;
+  line-height: 130%;
+  font-weight: 400;
+  color: #666;
+}
+ul.condition-set .condition-item.is-compound .compound-content h4 a.condition-text {
+  color: #333333;
+  padding-left: 10px;
+}
+ul.condition-set .condition-item.is-compound .compound-content h4 a.condition-text:hover {
+  text-decoration: underline;
+}
+ul.condition-set .condition-item.is-compound .compound-content .condition-set {
+  padding-left: 15px;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item {
+  position: relative;
+  margin-top: 10px;
+  margin-left: 20px;
+  border: 2px dotted #e0e0e0;
+  border-radius: 5px;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item:before {
+  color: #bdc3c7;
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  -webkit-font-smoothing: antialiased;
+  *margin-right: .3em;
+  content: "\f067";
+  font-size: 16px;
+  position: absolute;
+  left: -23px;
+  top: -11px;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item > a {
+  color: #bdc3c7;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  padding: 13px 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 12px;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item:hover,
+ul.condition-set .condition-item.is-compound .compound-add-item:focus {
+  background-color: #4ea5e0;
+  border-color: #4ea5e0;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item:hover:before,
+ul.condition-set .condition-item.is-compound .compound-add-item:focus:before {
+  color: #999;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item:hover > a,
+ul.condition-set .condition-item.is-compound .compound-add-item:focus > a {
+  color: #ffffff;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item:active {
+  background: #3498db;
+  border-color: #3498db;
+}
+ul.condition-set .condition-item.is-compound .compound-add-item:active > a {
+  color: #ffffff;
+}
+ul.condition-set .condition-item.is-compound.is-inner {
+  padding-right: 20px;
+}
+ul.condition-set .condition-item.is-compound.is-inner a.condition-delete-compound {
+  right: -7px;
+  top: 0;
+}

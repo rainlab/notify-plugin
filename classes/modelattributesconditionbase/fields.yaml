@@ -1,0 +1,22 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+
+    subcondition:
+        label: Attribute
+        span: auto
+        type: dropdown
+
+    operator:
+        label: Operator
+        span: auto
+        type: dropdown
+        dependsOn: subcondition
+
+    value:
+        label: Value
+        dependsOn: [subcondition, operator]
+        type: partial
+        path: field_value

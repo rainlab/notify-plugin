@@ -1,0 +1,13 @@
+<div class="conditions-container">
+    <div
+        id="<?= $this->getId() ?>"
+        class="control-ruleconditions"
+        data-collapse-handler="<?= $this->getEventHandler('onSetCollapseStatus') ?>"
+        data-settings-handler="<?= $this->getEventHandler('onLoadConditionSetup') ?>"
+        data-delete-handler="<?= $this->getEventHandler('onDeleteCondition') ?>"
+        data-cancel-handler="<?= $this->getEventHandler('onCancelConditionSettings') ?>"
+        data-create-handler="<?= $this->getEventHandler('onLoadCreateChildCondition') ?>"
+        data-control="ruleconditions">
+        <?= $this->makePartial('conditions', ['condition' => $rootCondition]) ?>
+    </div>
+</div>

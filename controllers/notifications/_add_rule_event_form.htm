@@ -1,0 +1,41 @@
+<?= Form::open(['id' => 'addRuleEventForm']) ?>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="popup">&times;</button>
+        <h4 class="modal-title"><?= e(trans('rainlab.notify::lang.notifications.add_notification_rule')) ?></h4>
+    </div>
+    <div class="modal-body">
+
+        <?php if ($this->fatalError): ?>
+            <p class="flash-message static error"><?= $fatalError ?></p>
+        <?php else: ?>
+
+            <div class="list-preview">
+                <div class="control-simplelist is-selectable is-scrollable size-large" data-control="simplelist">
+                    <ul>
+                        <?php foreach ($events as $event): ?>
+
+                            <li>
+                                <a href="<?= Backend::url('rainlab/notify/notifications/create/'.$event->getEventIdentifier()) ?>">
+                                    <h5 class="heading"><?= e($event->getEventName()) ?></h5>
+                                    <p class="description"><?= e($event->getEventDescription()) ?></p>
+                                </a>
+                            </li>
+
+                        <?php endforeach ?>
+                    </ul>
+                </div>
+            </div>
+
+        <?php endif ?>
+
+    </div>
+
+    <div class="modal-footer">
+        <button
+            type="button"
+            class="btn btn-default"
+            data-dismiss="popup">
+            <?= e(trans('backend::lang.form.cancel')) ?>
+        </button>
+    </div>
+<?= Form::close() ?>

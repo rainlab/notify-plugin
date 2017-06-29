@@ -1,0 +1,68 @@
+<?= Form::open(['id' => 'propertyForm']) ?>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="popup">&times;</button>
+        <h4 class="modal-title">
+            <?php if (!$this->fatalError): ?>
+                <?= e($condition->getTitle()) ?>
+            <?php else: ?>
+                Condition
+            <?php endif ?>
+        </h4>
+    </div>
+
+    <?php if (!$this->fatalError): ?>
+
+        <input type="hidden" name="current_parent_id" value="<?= $this->getParentIdFromCondition($condition) ?>" />
+        <input type="hidden" name="current_condition_id" value="<?= $condition->id ?>" />
+        <input type="hidden" name="current_condition_data" value="<?= e(json_encode($this->getCacheConditionDataPayload())) ?>" />
+
+        <div class="modal-body">
+            <?= $conditionFormWidget->render() ?>
+        </div>
+        <div class="modal-footer">
+            <button
+                class="btn btn-primary"
+                data-request="<?= $this->getEventHandler('onSaveCondition') ?>"
+                data-hotkey="ctrl+s, cmd+s"
+                data-popup-load-indicator
+                class="btn btn-primary">
+                <u>S</u>ave
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.cancel')) ?>
+            </button>
+
+            <?php if (!$this->isRootCondition($condition)): ?>
+                <button
+                    type="button"
+                    class="oc-icon-trash-o btn-icon danger pull-left"
+                    data-request="<?= $this->getEventHandler('onDeleteCondition') ?>"
+                    data-popup-load-indicator
+                    data-request-confirm="Do you really want to delete this condition?">
+                </button>
+            <?php endif ?>
+
+        </div>
+
+    <?php else: ?>
+
+        <div class="modal-body">
+            <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
+        </div>
+        <div class="modal-footer">
+            <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="popup">
+                <?= e(trans('backend::lang.form.close')) ?>
+            </button>
+        </div>
+
+    <?php endif ?>
+
+<?php Form::close() ?>

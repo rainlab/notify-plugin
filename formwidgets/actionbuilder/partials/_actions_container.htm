@@ -1,0 +1,12 @@
+<div class="actions-container">
+    <div
+        id="<?= $this->getId() ?>"
+        class="control-ruleactions"
+        data-settings-handler="<?= $this->getEventHandler('onLoadActionSetup') ?>"
+        data-delete-handler="<?= $this->getEventHandler('onDeleteAction') ?>"
+        data-cancel-handler="<?= $this->getEventHandler('onCancelActionSettings') ?>"
+        data-create-handler="<?= $this->getEventHandler('onLoadCreateChildAction') ?>"
+        data-control="ruleactions">
+        <?= $this->makePartial('actions', ['actions' => $actions]) ?>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<li
+    id="<?= 'action'.$action->id ?>"
+    data-action-id="<?= $action->id ?>"
+    class="action-item <?= $action->hasFieldConfig() ? '' : 'no-form' ?>">
+    <div>
+        <div class="icons">
+            <span class="icon"><i class="icon-bolt"></i></span>
+            <span class="icon"><i class="<?= e($action->getActionIcon()) ?>"></i></span>
+        </div>
+        <a href="javascript:;" data-actions-settings>
+            <span class="title"><?= e($this->getCacheActionTitle($action)) ?></span>
+            <span class="comment"><?= e($this->getCacheActionText($action)) ?></span>
+        </a>
+        <ul class="submenu">
+            <li>
+                <p>
+                    <a href="javascript:;" data-actions-delete>
+                        <i class="icon-trash-o control-icon"></i>
+                    </a>
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <input
+        type="hidden"
+        name="action_data[<?= $action->id ?>]"
+        value="<?= e(json_encode($this->getCacheActionData($action))) ?>" />
+</li>

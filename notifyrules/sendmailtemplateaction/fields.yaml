@@ -1,0 +1,16 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+    mail_template:
+        label: Mail template
+        type: dropdown
+
+    send_to_mode:
+        label: Send to
+        type: dropdown
+
+    reply_to_mode:
+        label: Reply-to address
+        type: dropdown

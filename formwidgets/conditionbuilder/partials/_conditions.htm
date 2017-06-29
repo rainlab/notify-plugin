@@ -1,0 +1,10 @@
+<ul class="condition-set">
+    <?= $this->makePartial('condition', [
+        'condition' => $condition,
+        'treeLevel' => 0
+    ]) ?>
+</ul>
+
+<?php if (isset($newConditionId)): ?>
+    <script> showConditionSettings('<?= e($newConditionId) ?>') </script>
+<?php endif ?>

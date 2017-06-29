@@ -1,0 +1,31 @@
+<div class="action-set">
+    <ol>
+        <li>
+            <div class="no-hover">
+                <div class="icons">
+                    <span class="icon">ON</span>
+                    <span class="icon"><i class="icon-user"></i></span>
+                </div>
+                <div class="content">
+                    <span class="title"><?= e($formModel->getEventName()) ?></span>
+                    <span class="comment"><?= e($formModel->getEventDescription()) ?></span>
+                </div>
+            </div>
+        </li>
+        <?php foreach ($actions as $action): ?>
+            <?= $this->makePartial('action', ['action' => $action]) ?>
+        <?php endforeach ?>
+    </ol>
+
+    <a
+        href="javascript:;"
+        data-control="popup"
+        data-handler="<?= $this->getEventHandler('onLoadCreateActionForm') ?>"
+        class="menu-control">
+        <i class="icon-plus"></i> Add action
+    </a>
+</div>
+
+<?php if (isset($newActionId)): ?>
+    <script> showActionSettings('<?= e($newActionId) ?>') </script>
+<?php endif ?>
