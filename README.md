@@ -45,10 +45,9 @@ Here is an example of a plugin registering notification rules. The `groups` defi
 Here is an example of triggering a notification. The system event `rainlab.user.activate` is bound to the `UserActivatedEvent` class.
 
     // Bind to a system event
-    \RainLab\Notify\Classes\Notifier::bindEvent(
-        'rainlab.user.activate',
-        \RainLab\User\NotifyRules\UserActivatedEvent::class
-    );
+    \RainLab\Notify\Classes\Notifier::bindEvents([
+        'rainlab.user.activate' => \RainLab\User\NotifyRules\UserActivatedEvent::class
+    ]);
 
     // Fire the system event
     Event::fire('rainlab.user.activate', [$this]);
@@ -56,14 +55,14 @@ Here is an example of triggering a notification. The system event `rainlab.user.
 Here is an example of registering context parameters, which are available globally to all notifications.
 
     \RainLab\Notify\Classes\Notifier::instance()->registerCallback(function($manager) {
-        $manager->registerContextVars([
+        $manager->registerGlobalParams([
             'user' => Auth::getUser()
         ]);
     });
 
 ## Creating Event classes
 
-An event class is responsible for preparing the properties that will be passed to the conditions and actions. The static method `makePropertiesFromEvent` will take the arguments provided by the system event and convert them in to parameters.
+An event class is responsible for preparing the parameters passed to the conditions and actions. The static method `makeParamsFromEvent` will take the arguments provided by the system event and convert them in to parameters.
 
     class UserActivatedEvent extends \RainLab\Notify\Classes\EventBase
     {
@@ -80,9 +79,9 @@ An event class is responsible for preparing the properties that will be passed t
         }
 
         /**
-         * Defines the properties used by this class.
+         * Defines the parameters used by this class.
          */
-        public function defineProperties()
+        public function defineParams()
         {
             return [
                 'user' => [
@@ -92,7 +91,7 @@ An event class is responsible for preparing the properties that will be passed t
             ];
         }
 
-        public static function makePropertiesFromEvent(array $args, $eventName = null)
+        public static function makeParamsFromEvent(array $args, $eventName = null)
         {
             return [
                 'user' => array_get($args, 0)
@@ -279,3 +278,39 @@ An attributes definition file is used to specify which attributes should be incl
                 label: Name
                 nameFrom: name
                 keyFrom: id
+
+## Save to database action
+
+There is a dedicated table in the database for storing events and their parameters. This table is accessed using the `RainLab\UserPlus\Models\Notification` model and can be referenced as a relation from your own models. In this example the `MyProject` model contains its own notification channel called `notifications`.
+
+    class MyProject extends Model
+    {
+        // ...
+
+        public $morphMany = [
+            'my_notifications' => [
+                \RainLab\UserPlus\Models\Notification::class,
+                'name' => 'notifiable'
+            ]
+        ];
+    }
+
+This channel should be registered with the `RainLab\Notify\NotifyRules\SaveDatabaseAction` so it appears as a related object when selecting the action.
+
+        SaveDatabaseAction::extend(function ($action) {
+            $action->addTableDefinition([
+                'label'    => 'Project activity',
+                'class'    => MyProject::class,
+                'relation' => 'my_notifications',
+                'param'    => 'project'
+            ]);
+        });
+
+The **label** is shown as the related object, the **class** references the model class, the **relation** refers to the relation name. The **param** defines the parameter name, passed to the triggering event.
+
+So essentially if you pass a `project` to the event parameters, or if `project` is a global parameter, a notification model is created with the parameters stored in the `data` attribute. Equivalent to the following code:
+
+    $myproject->my_notifications()->create([
+        // ...
+        'data' => $params
+    ]);

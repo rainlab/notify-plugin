@@ -5,6 +5,7 @@ use Queue;
 use Event;
 use BackendAuth;
 use System\Classes\PluginManager;
+use RainLab\Notify\Models\NotificationRule as NotificationRuleModel;
 
 /**
  * Notification manager
@@ -24,11 +25,11 @@ class Notifier
     /**
      * Registers a callback function that defines context variables.
      * The callback function should register context variables by calling the manager's
-     * `registerContextVars` method. The manager instance is passed to the callback
+     * `registerGlobalParams` method. The manager instance is passed to the callback
      * function as an argument. Usage:
      *
      *     Notifier::registerCallback(function($manager){
-     *         $manager->registerContextVars([...]);
+     *         $manager->registerGlobalParams([...]);
      *     });
      *
      * @param callable $callback A callable function.
@@ -42,17 +43,25 @@ class Notifier
     // Event binding
     //
 
+    public static function bindEvents(array $events)
+    {
+        foreach ($events as $event => $class) {
+            self::bindEvent($event, $class);
+        }
+    }
+
     public static function bindEvent($systemEventName, $notifyEventClass)
     {
+
         Event::listen($systemEventName, function() use ($notifyEventClass, $systemEventName) {
-            self::instance()->queueEvent(func_get_args(), $notifyEventClass, $systemEventName);
+            $params = $notifyEventClass::makeParamsFromEvent(func_get_args(), $systemEventName);
+
+            self::instance()->queueEvent($notifyEventClass, $params);
         });
     }
 
-    public function queueEvent($args, $eventClass, $eventName = null)
+    public function queueEvent($eventClass, array $params)
     {
-        $params = $eventClass::makePropertiesFromEvent($args, $eventName);
-
         $params += $this->getContextVars();
 
         // Use queue
@@ -66,7 +75,7 @@ class Notifier
 
     public function fireEvent($eventClass, array $params)
     {
-        $models = new \RainLab\Notify\Models\NotificationRule;
+        $models = new NotificationRuleModel;
 
         $models = $models
             ->applyClass($eventClass)
@@ -75,7 +84,7 @@ class Notifier
         ;
 
         foreach ($models as $model) {
-            $model->setProperties($params);
+            $model->setParams($params);
             $model->triggerRule();
         }
     }

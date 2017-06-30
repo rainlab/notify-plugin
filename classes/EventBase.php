@@ -15,12 +15,15 @@ use RainLab\Notify\Interfaces\Event as EventInterface;
  */
 class EventBase extends ExtensionBase implements EventInterface
 {
-    use \System\Traits\PropertyContainer;
-
     /**
      * @var Model host object
      */
     protected $host;
+
+    /**
+     * @var array Contains the event parameter values.
+     */
+    protected $params = [];
 
     /**
      * Returns information about this event, including name and description.
@@ -40,12 +43,40 @@ class EventBase extends ExtensionBase implements EventInterface
     }
 
     /**
-     * Generates event properties based on arguments from the triggering system event.
+     * Defines the parameters used by this class.
+     * This method should be used as an override in the extended class.
+     */
+    public function defineParams()
+    {
+        return [];
+    }
+
+    /**
+     * Sets multiple params.
+     * @param array $params
+     * @return void
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+    }
+
+    /**
+     * Returns all params.
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    /**
+     * Generates event parameters based on arguments from the triggering system event.
      * @param array $args
      * @param string $eventName
      * @return void
      */
-    public static function makePropertiesFromEvent(array $args, $eventName = null)
+    public static function makeParamsFromEvent(array $args, $eventName = null)
     {
     }
 

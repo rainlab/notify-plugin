@@ -37,15 +37,9 @@ class RuleAction extends Model
     /**
      * @var array Relations
      */
-    public $hasOne = [];
-    public $hasMany = [];
-    public $belongsTo = [];
-    public $belongsToMany = [];
-    public $morphTo = [];
-    public $morphOne = [];
-    public $morphMany = [];
-    public $attachOne = [];
-    public $attachMany = [];
+    public $belongsTo = [
+        'notification_rule' => [NotificationRule::class, 'key' => 'rule_host_id'],
+    ];
 
     /**
      * Extends this model with the action class

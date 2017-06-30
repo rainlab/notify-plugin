@@ -12,10 +12,10 @@ interface Event
     public function eventDetails();
 
     /**
-     * Generates event properties based on arguments from the triggering system event.
+     * Generates event parameters based on arguments from the triggering system event.
      * @param array $args
      * @param string $eventName
      * @return void
      */
-    public static function makePropertiesFromEvent(array $args, $eventName = null);
+    public static function makeParamsFromEvent(array $args, $eventName = null);
 }

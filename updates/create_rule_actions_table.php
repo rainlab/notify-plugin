@@ -1,4 +1,4 @@
-<?php namespace Rainlab\Notify\Updates;
+<?php namespace RainLab\Notify\Updates;
 
 use Schema;
 use October\Rain\Database\Schema\Blueprint;

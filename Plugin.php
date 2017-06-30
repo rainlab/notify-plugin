@@ -40,8 +40,8 @@ class Plugin extends PluginBase
             'groups' => [],
             'events' => [],
             'actions' => [
-                \RainLab\Notify\NotifyRules\SendMailTemplateAction::class,
                 \RainLab\Notify\NotifyRules\SaveDatabaseAction::class,
+                \RainLab\Notify\NotifyRules\SendMailTemplateAction::class,
             ],
             'conditions' => [
                 \RainLab\Notify\NotifyRules\ExecutionContextCondition::class,

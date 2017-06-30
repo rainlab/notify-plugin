@@ -59,12 +59,12 @@ class NotificationRule extends Model
     ];
 
     /**
-     * Kicks off this notification rule, fires the event to obtain its properties,
+     * Kicks off this notification rule, fires the event to obtain its parameters,
      * checks the rule conditions evaluate as true, then spins over each action.
      */
     public function triggerRule()
     {
-        $params = $this->getEventObject()->getProperties();
+        $params = $this->getEventObject()->getParams();
         $rootCondition = $this->rule_conditions->first();
 
         if (!$rootCondition) {
@@ -76,6 +76,7 @@ class NotificationRule extends Model
         }
 
         foreach ($this->rule_actions as $action) {
+            $action->setRelation('notification_rule', $this);
             $action->triggerAction($params);
         }
     }
@@ -106,16 +107,18 @@ class NotificationRule extends Model
 
     /**
      * Returns the event class extension object.
-     * @param  string $class Class name
      * @return \RainLab\Notify\Classes\NotificationEvent
      */
-    public function getEventObject($class = null)
+    public function getEventObject()
     {
-        if (!$class) {
-            $class = $this->class_name;
-        }
+        $this->applyEventClass();
 
-        return $this->asExtension($class);
+        return $this->asExtension($this->getEventClass());
+    }
+
+    public function getEventClass()
+    {
+        return $this->class_name;
     }
 
     public function afterFetch()
