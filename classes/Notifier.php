@@ -52,7 +52,6 @@ class Notifier
 
     public static function bindEvent($systemEventName, $notifyEventClass)
     {
-
         Event::listen($systemEventName, function() use ($notifyEventClass, $systemEventName) {
             $params = $notifyEventClass::makeParamsFromEvent(func_get_args(), $systemEventName);
 

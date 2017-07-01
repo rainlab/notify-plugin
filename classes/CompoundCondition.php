@@ -76,13 +76,17 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
         return $options;
     }
 
-    public function getChildOptions($ruleType, array $parentIds)
+    public function getChildOptions(array $options)
     {
+        extract(array_merge([
+            'extraRules' => [],
+        ], $options));
+
         $result = [
             'Compound condition' => CompoundCondition::class
         ];
 
-        $classes = self::findConditionsByType(ConditionBase::TYPE_ANY);
+        $classes = $extraRules + self::findConditionsByType(ConditionBase::TYPE_ANY);
 
         $result = $this->addClassesSubconditions($classes, $result);
 

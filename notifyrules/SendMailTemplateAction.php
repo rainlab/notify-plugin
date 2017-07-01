@@ -7,7 +7,6 @@ use RainLab\Notify\Classes\ActionBase;
 class SendMailTemplateAction extends ActionBase
 {
     public $recipientModes = [
-        'default' => 'System default',
         'user' => 'User email address (if applicable)',
         'sender' => 'Sender user email address (if applicable)',
         'custom' => 'Specific email address',
@@ -67,7 +66,7 @@ class SendMailTemplateAction extends ActionBase
 
     public function getReplyToModeOptions()
     {
-        return $this->recipientModes;
+        return ['default' => 'System default'] + $this->recipientModes;
     }
 
     public function getMailTemplateOptions()

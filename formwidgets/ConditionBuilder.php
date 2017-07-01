@@ -178,6 +178,9 @@ class ConditionBuilder extends FormWidgetBase
         try {
             $condition = $this->findConditionObj();
 
+            /*
+             * Look up parents
+             */
             $parents = [$condition->id];
             $parentsArray = post('condition_parent_id', []);
             $currentId = $condition->id;
@@ -186,7 +189,22 @@ class ConditionBuilder extends FormWidgetBase
                 $parents[] = $currentId = $parentsArray[$currentId];
             }
 
-            $options = $condition->getChildOptions($this->conditionsRuleType, $parents);
+            /*
+             * Custom rules provided by model
+             */
+            $extraRules = [];
+            if ($this->model->methodExists('getExtraConditionRules')) {
+                $extraRules = $this->model->getExtraConditionRules();
+            }
+
+            /*
+             * Look up conditions
+             */
+            $options = $condition->getChildOptions([
+                'ruleType' => $this->conditionsRuleType,
+                'parentIds' => $parents,
+                'extraRules' => $extraRules
+            ]);
 
             $this->prepareVars();
             $this->vars['condition'] = $condition;

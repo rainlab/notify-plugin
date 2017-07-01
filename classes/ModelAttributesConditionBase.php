@@ -45,6 +45,15 @@ class ModelAttributesConditionBase extends ConditionBase
         $this->addViewPath($this->guessViewPathFrom(__CLASS__));
     }
 
+    /**
+     * This function should return one of the `ConditionBase::TYPE_*` constants 
+     * depending on a place where the condition is valid
+     */
+    public function getConditionType()
+    {
+        return ConditionBase::TYPE_LOCAL;
+    }
+
     public function defineValidationRules()
     {
         return [
@@ -254,11 +263,6 @@ class ModelAttributesConditionBase extends ConditionBase
     public function setCustomData()
     {
         $this->host->condition_control_type = $this->evalControlType();
-    }
-
-    public function getConditionType()
-    {
-        return ConditionBase::TYPE_ANY;
     }
 
     public function getModelObj()

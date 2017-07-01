@@ -204,7 +204,7 @@ class ConditionBase extends ExtensionBase implements ConditionInterface
         return false;
     }
 
-    public function getChildOptions($ruleType, array $parentIds)
+    public function getChildOptions(array $options)
     {
         return [];
     }

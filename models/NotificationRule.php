@@ -82,6 +82,23 @@ class NotificationRule extends Model
     }
 
     /**
+     * Returns extra conditions provided by the event.
+     * @return array
+     */
+    public function getExtraConditionRules()
+    {
+        $rules = [];
+
+        $classes = $this->getEventObject()->defineConditions();
+
+        foreach ($classes as $class) {
+            $rules[$class] = new $class;
+        }
+
+        return $rules;
+    }
+
+    /**
      * Extends this class with the event class
      * @param  string $class Class name
      * @return boolean

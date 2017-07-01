@@ -19,9 +19,14 @@ interface Condition
 
     /**
      * Returns a list of options supported beneth this condition.
-     * @param string $ruleType
-     * @param array $parentIds
+     *
+     * Options can contain these keys:
+     * - ruleType: Rule type as specified by ConditionBase::TYPE_* constants
+     * - parentIds: An array of parent ids to constrain child conditions
+     * - extraRules: An array of additional condition classes to use
+     *
+     * @param array $options
      * @return array
      */
-    public function getChildOptions($ruleType, array $parentIds);
+    public function getChildOptions(array $options);
 }
