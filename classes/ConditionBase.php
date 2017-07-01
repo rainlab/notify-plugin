@@ -121,12 +121,12 @@ class ConditionBase extends ExtensionBase implements ConditionInterface
     }
 
     /**
-     * This function should return one of the `self::TYPE_*` constants 
+     * This function should return one of the `ConditionBase::TYPE_*` constants 
      * depending on a place where the condition is valid
      */
     public function getConditionType()
     {
-        return self::TYPE_ANY;
+        return ConditionBase::TYPE_ANY;
     }
 
     public function listSubconditions()

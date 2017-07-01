@@ -13,7 +13,7 @@ When a notification fires, it uses the following workflow:
 1. Plugin registers associated actions, conditions and events using `registerNotificationRules`
 1. A notification class is bound to a system event using `Notifier::bindEvent`
 1. A system event is fired `Event::fire`
-1. The parameters of the event are captured, along with any context parameters
+1. The parameters of the event are captured, along with any global context parameters
 1. A command is pushed on the queue to process the notification `Queue::push`
 1. The command finds all notification rules using the notification class and triggers them
 1. The notification conditions are checked and only proceed if met
@@ -89,6 +89,16 @@ An event class is responsible for preparing the parameters passed to the conditi
                     'label' => 'Name of the user',
                 ],
                 // ...
+            ];
+        }
+
+        /**
+         * Local conditions supported by this event.
+         */
+        public function defineConditions()
+        {
+            return [
+                \RainLab\User\NotifyRules\UserAttributeCondition::class
             ];
         }
 
@@ -172,6 +182,18 @@ A condition class should specify how it should appear in the user interface, pro
 
     class MyCondition extends \RainLab\Notify\Classes\ConditionBase
     {
+        /**
+         * Return either ConditionBase::TYPE_ANY or ConditionBase::TYPE_LOCAL
+         */
+        public function getConditionType()
+        {
+            // If the condition should appear for all events
+            return ConditionBase::TYPE_ANY;
+
+            // If the condition should appear only for some events
+            return ConditionBase::TYPE_LOCAL;
+        }
+
         /**
          * Field configuration for the condition.
          */
