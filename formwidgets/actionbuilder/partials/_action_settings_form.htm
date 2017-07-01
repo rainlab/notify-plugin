@@ -17,7 +17,14 @@
         <input type="hidden" name="current_action_data" value="<?= e(json_encode($this->getCacheActionDataPayload())) ?>" />
 
         <div class="modal-body">
-            <?= $actionFormWidget->render() ?>
+            <div class="row">
+                <div class="col-md-8">
+                    <?= $actionFormWidget->render() ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $this->makePartial('available_tags') ?>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button

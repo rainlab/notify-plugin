@@ -79,15 +79,16 @@ An event class is responsible for preparing the parameters passed to the conditi
         }
 
         /**
-         * Defines the parameters used by this class.
+         * Defines the usable parameters provided by this class.
          */
         public function defineParams()
         {
             return [
-                'user' => [
-                    'title' => 'User',
-                    'description' => 'The activated user',
+                'name' => [
+                    'title' => 'Name',
+                    'label' => 'Name of the user',
                 ],
+                // ...
             ];
         }
 
@@ -139,7 +140,10 @@ Action classes define the final step in a notification and subsequently perform 
          */
         public function triggerAction($params)
         {
-            // Sends the mail
+            $email = 'test@email.tld';
+            $template = $this->host->template_name;
+
+            Mail::sendTo($email, $template, $params);
         }
     }
 

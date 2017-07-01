@@ -68,7 +68,7 @@ function showActionSettings(id) {
         $el.popup({
             handler: this.options.settingsHandler,
             extraData: { current_action_id: actionId },
-            size: 'large'
+            size: 'giant'
         })
 
         // This will not fire on successful save because the target element
@@ -99,7 +99,7 @@ function showActionSettings(id) {
         $el.popup({
             handler: this.options.settingsHandler,
             extraData: { current_action_id: actionId },
-            size: 'large'
+            size: 'giant'
         })
 
         return false

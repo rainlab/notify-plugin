@@ -73,6 +73,7 @@ class ActionBuilder extends FormWidgetBase
         $this->vars['formModel'] = $this->model;
         $this->vars['actions'] = $this->getActions();
         $this->vars['actionFormWidget'] = $this->actionFormWidget;
+        $this->vars['availableTags'] = $this->getAvailableTags();
     }
 
     /**
@@ -261,6 +262,21 @@ class ActionBuilder extends FormWidgetBase
     // Helpers
     //
 
+    protected function getAvailableTags()
+    {
+        $tags = [];
+
+        if ($this->model->methodExists('defineParams')) {
+            $params = $this->model->defineParams();
+
+            foreach ($params as $param => $definition) {
+                $tags[$param] = array_get($definition, 'label');
+            }
+        }
+
+        return $tags;
+    }
+
     /**
      * Updates the primary rule actions container
      * @return array
@@ -298,7 +314,7 @@ class ActionBuilder extends FormWidgetBase
         return $this->actionFormWidget = $widget;
     }
 
-    public function getActions()
+    protected function getActions()
     {
         if ($this->actionsCache !== false) {
             return $this->actionsCache;

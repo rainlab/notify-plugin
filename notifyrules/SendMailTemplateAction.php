@@ -1,6 +1,8 @@
 <?php namespace RainLab\Notify\NotifyRules;
 
+use Mail;
 use Lang;
+use Config;
 use System\Models\MailTemplate;
 use RainLab\Notify\Classes\ActionBase;
 
@@ -31,6 +33,15 @@ class SendMailTemplateAction extends ActionBase
      */
     public function triggerAction($params)
     {
+        $template = $this->host->mail_template;
+
+        $recipient = $this->getRecipientAddress($this->host->send_to_mode, $params);
+
+        if (!$recipient || !$template) {
+            return;
+        }
+
+        Mail::sendTo($recipient, $template, $params);
     }
 
     /**
@@ -75,5 +86,20 @@ class SendMailTemplateAction extends ActionBase
         $result = ['' => '- Select template -'];
         $result += array_combine($codes, $codes);
         return $result;
+    }
+
+    protected function getRecipientAddress($mode, $params)
+    {
+        if ($mode == 'custom') {
+            return ['email@todo.tld' => 'TODO'];
+        }
+
+        if ($mode == 'default') {
+            $name = Config::get('mail.from.name', 'Your Site');
+            $address = Config::get('mail.from.address', 'admin@domain.tld');
+            return [$address => $name];
+        }
+
+        return array_get($params, $mode);
     }
 }
