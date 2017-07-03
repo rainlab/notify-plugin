@@ -45,6 +45,20 @@ class ModelAttributesConditionBase extends ConditionBase
         $this->addViewPath($this->guessViewPathFrom(__CLASS__));
     }
 
+    public function initConfigData($host)
+    {
+        $host->operator = 'is';
+    }
+
+    public function setCustomData()
+    {
+        $this->host->condition_control_type = $this->evalControlType();
+    }
+
+    //
+    // Definitions
+    //
+
     /**
      * This function should return one of the `ConditionBase::TYPE_*` constants 
      * depending on a place where the condition is valid
@@ -54,12 +68,26 @@ class ModelAttributesConditionBase extends ConditionBase
         return ConditionBase::TYPE_LOCAL;
     }
 
+    public function defineModelAttributes($type = null)
+    {
+        return 'attributes.yaml';
+    }
+
     public function defineValidationRules()
     {
         return [
             'value' => 'required'
         ];
     }
+
+    public function defineFormFields()
+    {
+        return plugins_path('rainlab/notify/classes/modelattributesconditionbase/fields.yaml');
+    }
+
+    //
+    // Text helpers
+    //
 
     public function getText()
     {
@@ -128,20 +156,19 @@ class ModelAttributesConditionBase extends ConditionBase
         return $result;
     }
 
-    public function initConfigData($host)
-    {
-        $host->operator = 'is';
-    }
-
     protected function getConditionTextPrefix($parametersHost, $attributes)
     {
         return $attributes[$parametersHost->subcondition];
     }
 
-    public function defineFormFields()
+    public function getCustomTextValue()
     {
-        return plugins_path('rainlab/notify/classes/modelattributesconditionbase/fields.yaml');
+        return false;
     }
+
+    //
+    // Options
+    //
 
     public function getSubconditionOptions()
     {
@@ -208,136 +235,6 @@ class ModelAttributesConditionBase extends ConditionBase
         return $options;
     }
 
-    public function getCustomTextValue()
-    {
-        return false;
-    }
-
-    public function getValueControlType()
-    {
-        if (App::runningInBackend()) {
-            return $this->evalControlType();
-        }
-
-        $hostObj = $this->host;
-
-        if ($controlType = $hostObj->condition_control_type) {
-            return $controlType;
-        }
-
-        $controlType = $this->evalControlType();
-
-        $this->getModelObj()
-            ->where('id', $host->id)
-            ->update(['condition_control_type' => $controlType]);
-
-        return $hostObj->condition_control_type = $controlType;
-    }
-
-    protected function evalControlType()
-    {
-        $hostObj = $this->host;
-        $attribute = $hostObj->subcondition;
-        $operator = $hostObj->operator;
-
-        $definitions = $this->listModelAttributeInfo();
-
-        if (!isset($definitions[$attribute])) {
-            return 'text';
-        }
-
-        $columnType = array_get($definitions[$attribute], 'type');
-
-        if ($columnType != ConditionBase::CAST_RELATION) {
-            return 'text';
-        }
-        else {
-            if ($operator == 'is' || $operator == 'is_not') {
-                return 'dropdown';
-            }
-
-            return 'multi_value';
-        }
-    }
-
-    public function setCustomData()
-    {
-        $this->host->condition_control_type = $this->evalControlType();
-    }
-
-    public function getModelObj()
-    {
-        if ($this->modelObj === null) {
-            if (array_key_exists($this->modelClass, self::$modelObjCache)) {
-                $this->modelObj = self::$modelObjCache[$this->modelClass];
-            }
-            else {
-                $this->modelObj = self::$modelObjCache[$this->modelClass] = new $this->modelClass;
-            }
-        }
-
-        return $this->modelObj;
-    }
-
-    /**
-     * Returns the supported attributes by a condition as an array.
-     * The key is the attribute and the value is the label.
-     *
-     * @return array
-     */
-    protected function listModelAttributes()
-    {
-        $attributeInfo = $this->listModelAttributeInfo();
-
-        foreach ($attributeInfo as $attribute => $info) {
-            $attributes[$attribute] = array_get($info, 'label');
-        }
-
-        asort($attributes);
-
-        return $attributes;
-    }
-
-    public function defineModelAttributes($type = null)
-    {
-        return 'attributes.yaml';
-    }
-
-    protected function listModelAttributeInfo()
-    {
-        if ($this->modelAttributes) {
-            return $this->modelAttributes;
-        }
-
-        $config = $this->makeConfig($this->defineModelAttributes($this->getConditionType()));
-
-        $attributes = $config->attributes ?? [];
-
-        /*
-         * Set defaults
-         */
-        foreach ($attributes as $attribute => $info) {
-            if (!isset($info['type'])) {
-                $attributes[$attribute]['type'] = 'string';
-            }
-        }
-
-        return $this->modelAttributes = $attributes;
-    }
-
-    public function listSubconditions()
-    {
-        $attributes = $this->listModelAttributes();
-
-        $result = [];
-
-        foreach ($attributes as $name => $code) {
-            $result[$code] = $name;
-        }
-
-        return $result;
-    }
-
     public function getValueDropdownOptions()
     {
         $hostObj = $this->host;
@@ -369,6 +266,119 @@ class ModelAttributesConditionBase extends ConditionBase
             ? $results->listsNested($nameFrom, $keyFrom)
             : $results->lists($nameFrom, $keyFrom);
     }
+
+    //
+    // Control type
+    //
+
+    protected function evalControlType()
+    {
+        $hostObj = $this->host;
+        $attribute = $hostObj->subcondition;
+        $operator = $hostObj->operator;
+
+        $definitions = $this->listModelAttributeInfo();
+
+        if (!isset($definitions[$attribute])) {
+            return 'text';
+        }
+
+        $columnType = array_get($definitions[$attribute], 'type');
+
+        if ($columnType != ConditionBase::CAST_RELATION) {
+            return 'text';
+        }
+        else {
+            if ($operator == 'is' || $operator == 'is_not') {
+                return 'dropdown';
+            }
+
+            return 'multi_value';
+        }
+    }
+
+    public function getValueControlType()
+    {
+        if (App::runningInBackend()) {
+            return $this->evalControlType();
+        }
+
+        $hostObj = $this->host;
+
+        if ($controlType = $hostObj->condition_control_type) {
+            return $controlType;
+        }
+
+        $controlType = $this->evalControlType();
+
+        $this->getModelObj()
+            ->where('id', $host->id)
+            ->update(['condition_control_type' => $controlType]);
+
+        return $hostObj->condition_control_type = $controlType;
+    }
+
+    //
+    // Attributes
+    //
+
+    public function listSubconditions()
+    {
+        $attributes = $this->listModelAttributes();
+
+        $result = [];
+
+        foreach ($attributes as $name => $code) {
+            $result[$code] = $name;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the supported attributes by a condition as an array.
+     * The key is the attribute and the value is the label.
+     *
+     * @return array
+     */
+    protected function listModelAttributes()
+    {
+        $attributeInfo = $this->listModelAttributeInfo();
+
+        foreach ($attributeInfo as $attribute => $info) {
+            $attributes[$attribute] = array_get($info, 'label');
+        }
+
+        asort($attributes);
+
+        return $attributes;
+    }
+
+    protected function listModelAttributeInfo()
+    {
+        if ($this->modelAttributes) {
+            return $this->modelAttributes;
+        }
+
+        $config = $this->makeConfig($this->defineModelAttributes($this->getConditionType()));
+
+        $attributes = $config->attributes ?? [];
+
+        /*
+         * Set defaults
+         */
+        foreach ($attributes as $attribute => $info) {
+            if (!isset($info['type'])) {
+                $attributes[$attribute]['type'] = 'string';
+            }
+        }
+
+        return $this->modelAttributes = $attributes;
+    }
+
+    //
+    // Relation based attributes
+    //
 
     public function listSelectedReferenceRecords()
     {
@@ -517,6 +527,10 @@ class ModelAttributesConditionBase extends ConditionBase
     public function prepareFilterQuery($query, $model)
     {
     }
+
+    //
+    // Condition check
+    //
 
     /**
      * Checks whether the condition is TRUE for a specified model
@@ -692,5 +706,23 @@ class ModelAttributesConditionBase extends ConditionBase
         }
 
         return false;
+    }
+
+    //
+    // Helpers
+    //
+
+    public function getModelObj()
+    {
+        if ($this->modelObj === null) {
+            if (array_key_exists($this->modelClass, self::$modelObjCache)) {
+                $this->modelObj = self::$modelObjCache[$this->modelClass];
+            }
+            else {
+                $this->modelObj = self::$modelObjCache[$this->modelClass] = new $this->modelClass;
+            }
+        }
+
+        return $this->modelObj;
     }
 }

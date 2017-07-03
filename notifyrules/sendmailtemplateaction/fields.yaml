@@ -9,8 +9,22 @@ fields:
 
     send_to_mode:
         label: Send to
-        type: dropdown
+        type: radio
+
+    send_to_custom:
+        cssClass: radio-align
+        trigger:
+            action: show
+            field: send_to_mode
+            condition: value[custom]
 
     reply_to_mode:
         label: Reply-to address
-        type: dropdown
+        type: radio
+
+    reply_to_custom:
+        cssClass: radio-align
+        trigger:
+            action: show
+            field: reply_to_mode
+            condition: value[custom]
