@@ -453,11 +453,6 @@ class ModelAttributesConditionBase extends ConditionBase
 
     public function onPreRender($controller, $widget)
     {
-        $hostObj = $this->host;
-        $postData = post('Condition', []);
-        $hostObj->subcondition = $attribute = array_get($postData, 'subcondition');
-        $hostObj->operator = array_get($postData, 'operator');
-
         $controlType = $this->getValueControlType();
 
         if ($controlType != 'multi_value') {

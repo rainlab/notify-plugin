@@ -1,6 +1,7 @@
 <?php namespace Rainlab\Notify\Models;
 
 use Model;
+use Exception;
 
 /**
  * RuleAction Model
@@ -40,6 +41,19 @@ class RuleAction extends Model
     public $belongsTo = [
         'notification_rule' => [NotificationRule::class, 'key' => 'rule_host_id'],
     ];
+
+    public function triggerAction($params)
+    {
+        try {
+            $this->getActionObject()->triggerAction($params);
+        }
+        catch (Exception $ex) {
+            // We could log the error here, for now we should suppress
+            // any exceptions to let other actions proceed as normal
+            traceLog('Error with ' . $this->getActionClass());
+            traceLog($ex);
+        }
+    }
 
     /**
      * Extends this model with the action class

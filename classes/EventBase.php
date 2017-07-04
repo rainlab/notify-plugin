@@ -26,6 +26,11 @@ class EventBase extends ExtensionBase implements EventInterface
     protected $params = [];
 
     /**
+     * @var array Local conditions supported by this event.
+     */
+    public $conditions = [];
+
+    /**
      * Returns information about this event, including name and description.
      */
     public function eventDetails()
@@ -49,6 +54,14 @@ class EventBase extends ExtensionBase implements EventInterface
     public function defineParams()
     {
         return [];
+    }
+
+    /**
+     * Local conditions supported by this event.
+     */
+    public function defineConditions()
+    {
+        return $this->conditions;
     }
 
     /**

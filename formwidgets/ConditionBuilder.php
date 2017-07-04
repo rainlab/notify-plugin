@@ -44,6 +44,11 @@ class ConditionBuilder extends FormWidgetBase
     protected $conditionFormWidget;
 
     /**
+     * @var RainLab\Notify\Models\RuleCondition
+     */
+    protected $conditionObjectCache;
+
+    /**
      * {@inheritDoc}
      */
     public function init()
@@ -159,11 +164,8 @@ class ConditionBuilder extends FormWidgetBase
         try {
             $condition = $this->findConditionObj();
 
-            $data = $this->getCacheConditionAttributes($condition);
-
-            $this->conditionFormWidget->setFormValues($data);
-
             $this->prepareVars();
+
             $this->vars['condition'] = $condition;
         }
         catch (Exception $ex) {
@@ -416,6 +418,15 @@ class ConditionBuilder extends FormWidgetBase
         $widget = $this->makeWidget('Backend\Widgets\Form', $config);
 
         /*
+         * Set form values based on postback or cached attributes
+         */
+        if (!$data = post('Condition')) {
+            $data = $this->getCacheConditionAttributes($model);
+        }
+
+        $widget->setFormValues($data);
+
+        /*
          * Allow conditions to register their own widgets
          */
         $model->onPreRender($this->controller, $this);
@@ -425,6 +436,10 @@ class ConditionBuilder extends FormWidgetBase
 
     protected function findConditionObj($conditionId = null, $throw = true)
     {
+        if ($this->conditionObjectCache !== null) {
+            return $this->conditionObjectCache;
+        }
+
         $conditionId = $conditionId ? $conditionId : post('current_condition_id');
 
         $condition = null;
@@ -437,6 +452,6 @@ class ConditionBuilder extends FormWidgetBase
             throw new ApplicationException('Condition not found');
         }
 
-        return $condition;
+        return $this->conditionObjectCache = $condition;
     }
 }

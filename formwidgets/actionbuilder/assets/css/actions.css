@@ -144,6 +144,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   color: #ffffff;
+  text-decoration: none;
 }
 .action-set ol > li > div > ul.submenu li p a i.control-icon {
   font-size: 22px;

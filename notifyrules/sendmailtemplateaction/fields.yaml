@@ -6,10 +6,12 @@ fields:
     mail_template:
         label: Mail template
         type: dropdown
+        placeholder: Select template
 
     send_to_mode:
         label: Send to
         type: radio
+        span: left
 
     send_to_custom:
         cssClass: radio-align
@@ -18,9 +20,19 @@ fields:
             field: send_to_mode
             condition: value[custom]
 
+    send_to_admin:
+        label: Send to admin group
+        span: right
+        type: dropdown
+        trigger:
+            action: show
+            field: send_to_mode
+            condition: value[admin]
+
     reply_to_mode:
         label: Reply-to address
         type: radio
+        span: left
 
     reply_to_custom:
         cssClass: radio-align

@@ -67,6 +67,13 @@ An event class is responsible for preparing the parameters passed to the conditi
     class UserActivatedEvent extends \RainLab\Notify\Classes\EventBase
     {
         /**
+         * @var array Local conditions supported by this event.
+         */
+        public $conditions = [
+            \RainLab\User\NotifyRules\UserAttributeCondition::class
+        ];
+
+        /**
          * Returns information about this event, including name and description.
          */
         public function eventDetails()
@@ -89,16 +96,6 @@ An event class is responsible for preparing the parameters passed to the conditi
                     'label' => 'Name of the user',
                 ],
                 // ...
-            ];
-        }
-
-        /**
-         * Local conditions supported by this event.
-         */
-        public function defineConditions()
-        {
-            return [
-                \RainLab\User\NotifyRules\UserAttributeCondition::class
             ];
         }
 
@@ -340,3 +337,11 @@ So essentially if you pass a `project` to the event parameters, or if `project` 
         // ...
         'data' => $params
     ]);
+
+## Dynamically adding conditions to events
+
+Events can be extended to include new local conditions. Simply add the condition class to the event `$conditions` array property.
+
+    UserActivatedEvent::extend(function($event) {
+        $event->conditions[] = \RainLab\UserPlus\NotifyRules\UserLocationAttributeCondition::class;
+    });
