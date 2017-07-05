@@ -4,14 +4,6 @@
 // Conditions
 // --------------------------------------------------
 
-.condition-filter-search {
-    background-position: right -81px !important;
-    border-top: none  !important;
-    border-left: none  !important;
-    border-right: none  !important;
-    border-radius: 0;
-}
-
 ul.condition-set {
     padding: 5px 0 0;
     margin: 0;
@@ -262,5 +254,33 @@ ul.condition-set {
             right: -7px;
             top: 0;
         }
+    }
+}
+
+//
+// Multi value
+//
+
+.condition-multi-value {
+    .condition-filter-search {
+        background-position: right -81px !important;
+        border-top: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-radius: 0;
+        padding-left: 20px;
+    }
+
+    .filter-list {
+        margin: 0 -20px;
+
+        .list-footer {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    .added-filter-list {
+        margin: 0 -20px;
     }
 }

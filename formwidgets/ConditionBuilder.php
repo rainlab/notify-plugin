@@ -44,11 +44,6 @@ class ConditionBuilder extends FormWidgetBase
     protected $conditionFormWidget;
 
     /**
-     * @var RainLab\Notify\Models\RuleCondition
-     */
-    protected $conditionObjectCache;
-
-    /**
      * {@inheritDoc}
      */
     public function init()
@@ -70,6 +65,7 @@ class ConditionBuilder extends FormWidgetBase
     protected function loadAssets()
     {
         $this->addJs('js/conditions.js', 'RainLab.Notify');
+        $this->addJs('js/conditions.multivalue.js', 'RainLab.Notify');
         $this->addCss('css/conditions.css', 'RainLab.Notify');
     }
 
@@ -436,10 +432,6 @@ class ConditionBuilder extends FormWidgetBase
 
     protected function findConditionObj($conditionId = null, $throw = true)
     {
-        if ($this->conditionObjectCache !== null) {
-            return $this->conditionObjectCache;
-        }
-
         $conditionId = $conditionId ? $conditionId : post('current_condition_id');
 
         $condition = null;
@@ -452,6 +444,6 @@ class ConditionBuilder extends FormWidgetBase
             throw new ApplicationException('Condition not found');
         }
 
-        return $this->conditionObjectCache = $condition;
+        return $condition;
     }
 }

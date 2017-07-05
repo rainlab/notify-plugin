@@ -380,6 +380,13 @@ class ModelAttributesConditionBase extends ConditionBase
     // Relation based attributes
     //
 
+    public function getReferencePrimaryColumn($record)
+    {
+        $referenceInfo = $this->prepareReferenceListInfo();
+
+         return $record->{$referenceInfo->primaryColumn};
+    }
+
     public function listSelectedReferenceRecords()
     {
         $referenceInfo = $this->prepareReferenceListInfo();
@@ -517,6 +524,7 @@ class ModelAttributesConditionBase extends ConditionBase
 
         $controller->vars['listWidget'] = $listWidget;
         $controller->vars['searchWidget'] = $searchWidget;
+        $controller->vars['filterHostModel'] = $this->host;
     }
 
     public function prepareFilterQuery($query, $model)

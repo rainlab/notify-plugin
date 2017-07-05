@@ -1,10 +1,3 @@
-.condition-filter-search {
-  background-position: right -81px !important;
-  border-top: none  !important;
-  border-left: none  !important;
-  border-right: none  !important;
-  border-radius: 0;
-}
 ul.condition-set {
   padding: 5px 0 0;
   margin: 0;
@@ -213,4 +206,22 @@ ul.condition-set .condition-item.is-compound.is-inner {
 ul.condition-set .condition-item.is-compound.is-inner a.condition-delete-compound {
   right: -7px;
   top: 0;
+}
+.condition-multi-value .condition-filter-search {
+  background-position: right -81px !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-radius: 0;
+  padding-left: 20px;
+}
+.condition-multi-value .filter-list {
+  margin: 0 -20px;
+}
+.condition-multi-value .filter-list .list-footer {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.condition-multi-value .added-filter-list {
+  margin: 0 -20px;
 }

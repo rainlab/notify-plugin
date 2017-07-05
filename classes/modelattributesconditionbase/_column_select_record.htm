@@ -1,5 +1,10 @@
-<a href="#">
+<a
+    href="javascript:;"
+    class="nolink"
+    data-record-key="<?= e($record->getKey()) ?>"
+    data-record-value="<?= e($filterHostModel->getReferencePrimaryColumn($record)) ?>"
+    data-multivalue-add-record>
     <span class="list-badge badge-success">
-        <i class="icon-check"></i>
+        <i class="icon-plus"></i>
     </span>
 </a>

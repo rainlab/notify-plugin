@@ -30,54 +30,78 @@
     </select>
 
 <?php elseif ($controlType == 'multi_value'): ?>
-
-    <div class="filter-list list-flush">
-        <?= $searchWidget->render() ?>
-        <?= $listWidget->render() ?>
-    </div>
-
     <?php
-        $referenceInfo = $formModel->prepareReferenceListInfo();
         $selectedRecords = $formModel->listSelectedReferenceRecords();
+        $hasData = $selectedRecords->count();
     ?>
+    <div
+        class="condition-multi-value"
+        data-control="condition-multivalue"
+        data-data-locker="#<?= $field->getId() ?>">
 
-    <label>Selected Records</label>
-    <div class="added-filter-list control-list">
-        <table class="table data" data-control="rowlink">
-            <tbody>
-                <?php if ($selectedRecords->count()): ?>
-                    <?php foreach ($selectedRecords as $record): ?>
-                        <tr>
-                            <td style="width: 10px">
-                                <a href="#">
-                                    <span class="list-badge badge-default">
-                                        <i class="icon-minus"></i>
-                                    </span>
-                                </a>
-                            </td>
-                            <td>
-                                <?= e($record->{$referenceInfo->primaryColumn}) ?>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                <?php else: ?>
-                    <tr class="no-data">
-                        <td colspan="100" class="nolink">
-                            <p class="no-data">
-                                No records added
-                            </p>
-                        </td>
-                    </tr>
-                <?php endif ?>
-            </tbody>
-        </table>
+        <div class="filter-list list-flush">
+            <?= $searchWidget->render() ?>
+            <?= $listWidget->render() ?>
+        </div>
+
+        <label>Selected Records</label>
+        <div class="added-filter-list list-preview">
+            <div class="control-list">
+                <table class="table data">
+                    <tbody data-added-records>
+                        <?php if ($hasData): ?>
+                            <?php foreach ($selectedRecords as $record): ?>
+                                <tr data-record-key="<?= e($record->getKey()) ?>">
+                                    <td style="width: 10px">
+                                        <a href="javascript:;" data-multivalue-remove-record>
+                                            <span class="list-badge badge-default">
+                                                <i class="icon-minus"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <?= e($formModel->getReferencePrimaryColumn($record)) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                        <?php endif ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <input
+            type="hidden"
+            name="<?= $field->getName() ?>"
+            id="<?= $field->getId() ?>"
+            value="<?= e($field->value) ?>"
+        />
+
+        <script type="text/template" data-empty-record-template>
+            <tr class="no-data" data-no-record-data>
+                <td colspan="100" class="nolink">
+                    <p class="no-data">
+                        No records added
+                    </p>
+                </td>
+            </tr>
+        </script>
+
+        <script type="text/template" data-record-template>
+            <tr data-record-key="{{ key }}">
+                <td style="width: 10px">
+                    <a href="javascript:;" data-multivalue-remove-record>
+                        <span class="list-badge badge-default">
+                            <i class="icon-minus"></i>
+                        </span>
+                    </a>
+                </td>
+                <td>
+                    {{value}}
+                </td>
+            </tr>
+        </script>
+
     </div>
-
-    <input
-        type="hidden"
-        name="<?= $field->getName() ?>"
-        id="<?= $field->getId() ?>"
-        value="<?= e($field->value) ?>"
-    />
 
 <?php endif ?>
