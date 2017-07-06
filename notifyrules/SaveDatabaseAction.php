@@ -61,7 +61,10 @@ class SaveDatabaseAction extends ActionBase
 
         $value->$relation()->create([
             'id' => Uuid::uuid4()->toString(),
-            'type' => $rule->getEventClass(),
+            'event_type' => $rule->getEventClass(),
+            'icon' => $this->host->icon,
+            'type' => $this->host->type,
+            'body' => $this->host->body,
             'data' => $this->getData($params),
             'read_at' => null,
         ]);

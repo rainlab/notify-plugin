@@ -1,6 +1,7 @@
 <?php namespace RainLab\Notify\Models;
 
 use Model;
+use Markdown;
 
 /**
  * Notification Model stored in the database
@@ -40,6 +41,13 @@ class Notification extends Model
     protected $dates = ['read_at'];
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['parsed_body'];
+
+    /**
      * @var array Relations
      */
     public $morphTo = [
@@ -76,5 +84,31 @@ class Notification extends Model
     public function unread()
     {
         return $this->read_at === null;
+    }
+
+    /**
+     * Get the entity's unread notifications.
+     */
+    public function scopeApplyUnread($query)
+    {
+        return $query->whereNull('read_at');
+    }
+
+    /**
+     * Get the entity's read notifications.
+     */
+    public function scopeApplyRead($query)
+    {
+        return $query->whereNotNull('read_at');
+    }
+
+    /**
+     * Get the parsed body of the announcement.
+     *
+     * @return string
+     */
+    public function getParsedBodyAttribute()
+    {
+        return Markdown::parse($this->body);
     }
 }

@@ -10,9 +10,12 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('rainlab_notify_notifications', function(Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('type');
+            $table->string('event_type');
             $table->morphs('notifiable');
-            $table->text('data');
+            $table->string('icon')->nullable();
+            $table->string('type')->nullable();
+            $table->text('body')->nullable();
+            $table->mediumText('data');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
