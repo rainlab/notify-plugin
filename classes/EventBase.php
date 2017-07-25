@@ -1,6 +1,8 @@
 <?php namespace RainLab\Notify\Classes;
 
 use Str;
+use Yaml;
+use File;
 use Event;
 use System\Classes\PluginManager;
 use October\Rain\Extension\ExtensionBase;
@@ -187,5 +189,50 @@ class EventBase extends ExtensionBase implements EventInterface
                 return $obj;
             }
         }
+    }
+
+    /**
+     * Spins over preset registered in plugin base class with `registerNotificationRules`.
+     * @return array
+     */
+    public static function findEventPresets()
+    {
+        $results = [];
+        $bundles = PluginManager::instance()->getRegistrationMethodValues('registerNotificationRules');
+
+        foreach ($bundles as $plugin => $bundle) {
+            if (!$presets = array_get($bundle, 'presets')) {
+                continue;
+            }
+
+            if (!is_array($presets)) {
+                $presets = Yaml::parse(File::get(File::symbolizePath($presets)));
+            }
+
+            if ($presets && is_array($presets)) {
+                $results += $presets;
+            }
+        }
+
+        return $results;
+    }
+
+    public static function findEventPresetsByClass($className)
+    {
+        $results = [];
+
+        foreach (self::findEventPresets() as $code => $definition) {
+            if (!$eventClass = array_get($definition, 'event')) {
+                continue;
+            }
+
+            if ($eventClass != $className) {
+                continue;
+            }
+
+            $results[$code] = $definition;
+        }
+
+        return $results;
     }
 }

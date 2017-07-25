@@ -2,6 +2,7 @@
 
 use Model;
 use ApplicationException;
+use RainLab\Notify\Classes\EventBase;
 
 /**
  * Notification rule
@@ -138,6 +139,10 @@ class NotificationRule extends Model
         return $this->class_name;
     }
 
+    //
+    // Events
+    //
+
     public function afterFetch()
     {
         $this->applyEventClass();
@@ -149,6 +154,10 @@ class NotificationRule extends Model
             return;
         }
     }
+
+    //
+    // Scopes
+    //
 
     public function scopeApplyEnabled($query)
     {
@@ -162,5 +171,98 @@ class NotificationRule extends Model
         }
 
         return $query->where('class_name', $class);
+    }
+
+    //
+    // Presets
+    //
+
+    /**
+     * Returns an array of rule codes and descriptions.
+     * @return array
+     */
+    public static function listRulesForEvent($eventClass)
+    {
+        $results = [];
+
+        $dbRules = self::applyClass($eventClass)->get();
+        $presets = (array) EventBase::findEventPresetsByClass($eventClass);
+
+        foreach ($dbRules as $dbRule) {
+            if ($dbRule->code) {
+                unset($presets[$dbRule->code]);
+            }
+
+            if ($dbRule->is_enabled) {
+                $results[] = $dbRule;
+            }
+        }
+
+        foreach ($presets as $preset) {
+            if ($newPreset = self::createFromPreset($preset)) {
+                $results[] = $newPreset;
+            }
+        }
+
+        return $dbRules;
+    }
+
+    /**
+     * Syncronise all file-based presets to the database.
+     * @return void
+     */
+    public static function syncAll()
+    {
+        $presets = (array) EventBase::findEventPresets();
+        $dbRules = self::where('code', '!=', '')->whereNotNull('code')->lists('is_custom', 'code');
+        $newRules = array_diff_key($presets, $dbRules);
+
+        /*
+         * Clean up non-customized templates
+         */
+        foreach ($dbRules as $code => $isCustom) {
+            if ($isCustom) {
+                continue;
+            }
+
+            if (!array_key_exists($code, $presets) && ($record = self::whereCode($code)->first())) {
+                $record->delete();
+            }
+        }
+
+        /*
+         * Create new rules
+         */
+        foreach ($newRules as $code => $preset) {
+            self::createFromPreset($preset);
+        }
+    }
+
+    public static function createFromPreset($preset)
+    {
+        $actions = array_get($preset, 'items');
+        if (!$actions || !is_array($actions)) {
+            return;
+        }
+
+        $newRule = new self;
+        $newRule->code = $code;
+        $newRule->is_enabled = 1;
+        $newRule->is_custom = 0;
+        $newRule->name = array_get($preset, 'name');
+        $newRule->class_name = array_get($preset, 'event');
+        $newRule->forceSave();
+
+        foreach ($actions as $action) {
+            $params = array_except($action, 'action');
+
+            $newAction = new RuleAction;
+            $newAction->class_name = array_get($action, 'action');
+            $newAction->notification_rule = $newRule;
+            $newAction->fill($params);
+            $newAction->forceSave();
+        }
+
+        return $newRule;
     }
 }

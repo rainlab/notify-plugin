@@ -2,6 +2,7 @@
 
 use Model;
 use Exception;
+use SystemException;
 
 /**
  * RuleAction Model
@@ -96,10 +97,14 @@ class RuleAction extends Model
 
     protected function setCustomData()
     {
+        if (!$actionObj = $this->getActionObject()) {
+            throw new SystemException(sprintf('Unable to find action object [%s]', $this->getActionClass()));
+        }
+
         /*
          * Spin over each field and add it to config_data
          */
-        $config = $this->getActionObject()->getFieldConfig();
+        $config = $actionObj->getFieldConfig();
 
         /*
          * Action class has no fields

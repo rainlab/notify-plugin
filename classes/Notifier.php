@@ -23,6 +23,16 @@ class Notifier
     protected $callbacks = [];
 
     /**
+     * @var bool Internal marker to see if callbacks are run.
+     */
+    protected $registered = false;
+
+    /**
+     * @var array List of registered global params in the system
+     */
+    protected $registeredGlobalParams;
+
+    /**
      * Registers a callback function that defines context variables.
      * The callback function should register context variables by calling the manager's
      * `registerGlobalParams` method. The manager instance is passed to the callback
@@ -37,6 +47,23 @@ class Notifier
     public function registerCallback(callable $callback)
     {
         $this->callbacks[] = $callback;
+    }
+
+    /**
+     * Helper to process callbacks once and once only.
+     * @return void
+     */
+    protected function processCallbacks()
+    {
+        if ($this->registered) {
+            return;
+        }
+
+        foreach ($this->callbacks as $callback) {
+            $callback($this);
+        }
+
+        $this->registered = true;
     }
 
     //
@@ -74,13 +101,7 @@ class Notifier
 
     public function fireEvent($eventClass, array $params)
     {
-        $models = new NotificationRuleModel;
-
-        $models = $models
-            ->applyClass($eventClass)
-            ->applyEnabled()
-            ->get()
-        ;
+        $models = NotificationRuleModel::listRulesForEvent($eventClass);
 
         foreach ($models as $model) {
             $model->setParams($params);
@@ -88,13 +109,26 @@ class Notifier
         }
     }
 
+    public function registerGlobalParams(array $params)
+    {
+        if (!$this->registeredGlobalParams) {
+            $this->registeredGlobalParams = [];
+        }
+
+        $this->registeredGlobalParams = $params + $this->registeredGlobalParams;
+    }
+
     public function getContextVars()
     {
+        $this->processCallbacks();
+
+        $globals = $this->registeredGlobalParams ?: [];
+
         return [
             'isBackend' => App::runningInBackend() ? 1 : 0,
             'isConsole' => App::runningInConsole() ? 1 : 0,
             'appLocale' => App::getLocale(),
             'sender'    => null // unsafe:BackendAuth::getUser()
-        ];
+        ] + $globals;
     }
 }

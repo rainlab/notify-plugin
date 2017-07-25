@@ -17,7 +17,7 @@ class CreateNotificationRulesTable extends Migration
             $table->mediumText('config_data')->nullable();
             $table->mediumText('condition_data')->nullable();
             $table->boolean('is_enabled')->default(0);
-            $table->boolean('is_custom')->default(0);
+            $table->boolean('is_custom')->default(1);
             $table->timestamps();
         });
     }

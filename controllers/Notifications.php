@@ -9,7 +9,7 @@ use Backend;
 use Redirect;
 use BackendMenu;
 use Backend\Classes\Controller;
-use System\Models\MailTemplate;
+use RainLab\Notify\Models\NotificationRule;
 use System\Classes\SettingsManager;
 use RainLab\Notify\Classes\EventBase;
 use ApplicationException;
@@ -44,10 +44,11 @@ class Notifications extends Controller
         SettingsManager::setContext('RainLab.Notify', 'notifications');
     }
 
-    // public function index()
-    // {
-    //     $this->asExtension('ListController')->index();
-    // }
+    public function index()
+    {
+        NotificationRule::syncAll();
+        $this->asExtension('ListController')->index();
+    }
 
     public function create($eventAlias = null)
     {
@@ -81,10 +82,10 @@ class Notifications extends Controller
         return $model;
     }
 
-    public function formBeforeSave($model)
-    {
-        $model->is_custom = 1;
-    }
+    // public function formBeforeSave($model)
+    // {
+    //     $model->is_custom = 1;
+    // }
 
     public function index_onLoadRuleGroupForm()
     {

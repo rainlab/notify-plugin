@@ -19,7 +19,7 @@ When a notification fires, it uses the following workflow:
 1. The notification conditions are checked and only proceed if met
 1. The notification actions are triggered
 
-Here is an example of a plugin registering notification rules. The `groups` definition will create containers that are used to better organise events.
+Here is an example of a plugin registering notification rules. The `groups` definition will create containers that are used to better organise events. The `presets` definition specifies notification rules defined by the system.
 
     public function registerNotificationRules()
     {
@@ -39,6 +39,7 @@ Here is an example of a plugin registering notification rules. The `groups` defi
                     'icon' => 'icon-user'
                 ],
             ],
+            'presets' => '$/rainlab/user/config/notify_presets.yaml',
         ];
     }
 
@@ -59,6 +60,20 @@ Here is an example of registering context parameters, which are available global
             'user' => Auth::getUser()
         ]);
     });
+
+Here is an example of an event preset:
+
+    # ===================================
+    #  Event Presets
+    # ===================================
+
+    welcome_email:
+        name: Send welcome email to user
+        event: RainLab\User\NotifyRules\UserRegisteredEvent
+        items:
+            - action: RainLab\Notify\NotifyRules\SendMailTemplateAction
+              mail_template: rainlab.user::welcome
+              send_to_mode: user
 
 ## Creating Event classes
 
