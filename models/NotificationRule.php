@@ -198,8 +198,8 @@ class NotificationRule extends Model
             }
         }
 
-        foreach ($presets as $preset) {
-            if ($newPreset = self::createFromPreset($preset)) {
+        foreach ($presets as $code => $preset) {
+            if ($newPreset = self::createFromPreset($code, $preset)) {
                 $results[] = $newPreset;
             }
         }
@@ -234,11 +234,11 @@ class NotificationRule extends Model
          * Create new rules
          */
         foreach ($newRules as $code => $preset) {
-            self::createFromPreset($preset);
+            self::createFromPreset($code, $preset);
         }
     }
 
-    public static function createFromPreset($preset)
+    public static function createFromPreset($code, $preset)
     {
         $actions = array_get($preset, 'items');
         if (!$actions || !is_array($actions)) {
