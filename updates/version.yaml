@@ -4,3 +4,4 @@
     - create_notification_rules_table.php
     - create_rule_conditions_table.php
     - create_rule_actions_table.php
+1.0.2: Fixes crashing bug.
