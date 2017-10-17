@@ -319,7 +319,7 @@ An attributes definition file is used to specify which attributes should be incl
 
 ## Save to database action
 
-There is a dedicated table in the database for storing events and their parameters. This table is accessed using the `RainLab\UserPlus\Models\Notification` model and can be referenced as a relation from your own models. In this example the `MyProject` model contains its own notification channel called `notifications`.
+There is a dedicated table in the database for storing events and their parameters. This table is accessed using the `RainLab\Notify\Models\Notification` model and can be referenced as a relation from your own models. In this example the `MyProject` model contains its own notification channel called `notifications`.
 
     class MyProject extends Model
     {
@@ -327,7 +327,7 @@ There is a dedicated table in the database for storing events and their paramete
 
         public $morphMany = [
             'my_notifications' => [
-                \RainLab\UserPlus\Models\Notification::class,
+                \RainLab\Notify\Models\Notification::class,
                 'name' => 'notifiable'
             ]
         ];
