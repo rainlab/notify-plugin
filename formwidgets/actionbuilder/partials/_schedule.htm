@@ -1,0 +1,22 @@
+<div class="form-preview">
+    <p>
+        <i class="icon-clock-o"></i>
+        <?= e(trans('rainlab.notify::lang.action.schedule')) ?>
+    </p>
+    <p>
+        <?= $actionScheduleFormWidget->render() ?>
+    </p>
+    <div class="small">
+        <em>
+            <?php if(in_array($queueDriver, ['sync', 'sqs'])): ?>
+                <i class="icon-warning"></i>
+                <?= e(trans('rainlab.notify::lang.action.schedule_unsupported')) ?>
+            <?php else: ?>
+                <?= e(trans('rainlab.notify::lang.action.schedule_notice')) ?>
+            <?php endif ?>
+        </em>
+        <a target="_blank" href="https://octobercms.com/docs/services/queues#basic-usage">
+            <?= e(trans('rainlab.notify::lang.action.schedule_notice_more')) ?>
+        </a>
+    </div>
+</div>

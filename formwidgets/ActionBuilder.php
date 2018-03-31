@@ -34,6 +34,11 @@ class ActionBuilder extends FormWidgetBase
     protected $actionFormWidget;
 
     /**
+     * @var Backend\Widgets\Form
+     */
+    protected $actionScheduleFormWidget;
+
+    /**
      * {@inheritDoc}
      */
     public function init()
@@ -42,6 +47,10 @@ class ActionBuilder extends FormWidgetBase
         // ]);
 
         if ($widget = $this->makeActionFormWidget()) {
+            $widget->bindToController();
+        }
+
+        if ($widget = $this->makeActionScheduleFormWidget()) {
             $widget->bindToController();
         }
     }
@@ -73,6 +82,9 @@ class ActionBuilder extends FormWidgetBase
         $this->vars['formModel'] = $this->model;
         $this->vars['actions'] = $this->getActions();
         $this->vars['actionFormWidget'] = $this->actionFormWidget;
+        $connection = config('queue.default');
+        $this->vars['queueDriver'] = config("queue.connections.{$connection}.driver");
+        $this->vars['actionScheduleFormWidget'] = $this->actionScheduleFormWidget;
         $this->vars['availableTags'] = $this->getAvailableTags();
     }
 
@@ -127,7 +139,9 @@ class ActionBuilder extends FormWidgetBase
         $action = $this->findActionObj();
 
         $data = post('Action', []);
+        $schedule = post('ActionSchedule', []);
         $action->fill($data);
+        $action->fill($schedule);
         $action->validate();
         $action->action_text = $action->getActionObject()->getText();
 
@@ -145,7 +159,10 @@ class ActionBuilder extends FormWidgetBase
 
             $data = $this->getCacheActionAttributes($action);
 
-            $this->actionFormWidget->setFormValues($data);
+            if (! is_null($this->actionFormWidget)) {
+                $this->actionFormWidget->setFormValues($data);
+            }
+            $this->actionScheduleFormWidget->setFormValues($data);
 
             $this->prepareVars();
             $this->vars['action'] = $action;
@@ -312,6 +329,26 @@ class ActionBuilder extends FormWidgetBase
         $widget = $this->makeWidget('Backend\Widgets\Form', $config);
 
         return $this->actionFormWidget = $widget;
+    }
+
+    protected function makeActionScheduleFormWidget()
+    {
+        if ($this->actionScheduleFormWidget !== null) {
+            return $this->actionScheduleFormWidget;
+        }
+
+        if (!$model = $this->findActionObj(null, false)) {
+            return null;
+        }
+
+        $config = $this->makeConfig('$/rainlab/notify/models/ruleaction/fields_schedule.yaml');
+        $config->model = $model;
+        $config->alias = $this->alias . 'ScheduleForm';
+        $config->arrayName = 'ActionSchedule';
+
+        $widget = $this->makeWidget('Backend\Widgets\Form', $config);
+
+        return $this->actionScheduleFormWidget = $widget;
     }
 
     protected function getActions()

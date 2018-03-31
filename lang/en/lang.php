@@ -11,5 +11,9 @@ return [
     ],
     'action' => [
         'add_notification_action' => 'Add notification action',
+        'schedule' => 'Schedule',
+        'schedule_notice' => 'Note that scheduling might not work for certain queue driver configurations.',
+        'schedule_notice_more' => 'Learn more',
+        'schedule_unsupported' => 'The configured queue driver does not support delayed execution.'
     ],
 ];

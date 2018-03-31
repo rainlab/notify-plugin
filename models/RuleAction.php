@@ -2,7 +2,9 @@
 
 use Model;
 use Exception;
+use Queue;
 use SystemException;
+use Rainlab\Notify\Classes\ScheduledAction;
 
 /**
  * RuleAction Model
@@ -43,10 +45,16 @@ class RuleAction extends Model
         'notification_rule' => [NotificationRule::class, 'key' => 'rule_host_id'],
     ];
 
-    public function triggerAction($params)
+    public function triggerAction($params, $scheduled=true)
     {
         try {
-            $this->getActionObject()->triggerAction($params);
+            // Apply action schedule
+            if ($scheduled && $schedule = $this->getSchedule()) {
+                Queue::later($schedule,  new ScheduledAction($this, $params));
+            }
+            else {
+                $this->getActionObject()->triggerAction($params);
+            }
         }
         catch (Exception $ex) {
             // We could log the error here, for now we should suppress
@@ -104,21 +112,21 @@ class RuleAction extends Model
         /*
          * Spin over each field and add it to config_data
          */
-        $config = $actionObj->getFieldConfig();
 
-        /*
-         * Action class has no fields
-         */
-        if (!isset($config->fields)) {
-            return;
+        $metaAttributes = [
+            'action_text',
+            'schedule_type', 'schedule_delay', 'schedule_delay_factor'
+        ];
+
+        $formAttributes = [];
+        $config = $actionObj->getFieldConfig();
+        if (isset($config->fields)) {
+            $formAttributes = array_keys($config->fields);
         }
 
-        $staticAttributes = ['action_text'];
-
-        $fieldAttributes = array_merge($staticAttributes, array_keys($config->fields));
+        $fieldAttributes = array_merge($formAttributes, $metaAttributes);
 
         $dynamicAttributes = array_only($this->getAttributes(), $fieldAttributes);
-
         $this->config_data = $dynamicAttributes;
 
         $this->setRawAttributes(array_except($this->getAttributes(), $fieldAttributes));
@@ -139,6 +147,21 @@ class RuleAction extends Model
         if ($actionObj = $this->getActionObject()) {
             return $actionObj->getText();
         }
+    }
+
+    public function getSchedule() {
+        if ($this->schedule_type != 'delayed') {
+            return false;
+        }
+
+        if (!is_numeric($this->schedule_delay) || !is_numeric($this->schedule_delay_factor)) {
+            return false;
+        }
+
+        $delay = (int) $this->schedule_delay;
+        $delay_factor = (int) $this->schedule_delay_factor;
+
+        return abs($delay * $delay_factor);
     }
 
     public function getActionObject()
