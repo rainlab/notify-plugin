@@ -48,11 +48,20 @@ class RuleAction extends Model
     public function triggerAction($params, $scheduled=true)
     {
         try {
+            // Check if action is muted in which case we don't proceed sending a notification
+            if (method_exists($this, 'isMuted') && ! $this->isMuted()) {
+                return;
+            }
+
             // Apply action schedule
             if ($scheduled && $schedule = $this->getSchedule()) {
+                // We delay the execution using Queues. When dequeued
+                // ScheduledAction will call this triggerAction
+                // function with $scheduled=false
                 Queue::later($schedule,  new ScheduledAction($this, $params));
             }
             else {
+                // We trigger the action
                 $this->getActionObject()->triggerAction($params);
             }
         }
