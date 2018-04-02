@@ -48,8 +48,10 @@ class RuleAction extends Model
     public function triggerAction($params, $scheduled=true)
     {
         try {
+            $actionObject = $this->getActionObject();
+
             // Check if action is muted in which case we don't proceed sending a notification
-            if (method_exists($this, 'isMuted') && ! $this->isMuted()) {
+            if (method_exists($actionObject, 'isMuted') && $actionObject->isMuted()) {
                 return;
             }
 
@@ -62,7 +64,7 @@ class RuleAction extends Model
             }
             else {
                 // We trigger the action
-                $this->getActionObject()->triggerAction($params);
+                $actionObject->triggerAction($params);
             }
         }
         catch (Exception $ex) {
