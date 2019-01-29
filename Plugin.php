@@ -12,8 +12,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Notify',
-            'description' => 'Notification services',
+            'name'        => 'rainlab.notify::lang.plugin.name',
+            'description' => 'rainlab.notify::lang.plugin.description',
             'author'      => 'Alexey Bobkov, Samuel Georges',
             'icon'        => 'icon-bullhorn'
         ];
