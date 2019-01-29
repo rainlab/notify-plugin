@@ -54,7 +54,7 @@ class Plugin extends PluginBase
         return [
             'rainlab.notify.manage_notifications' => [
                 'tab' => SettingsManager::CATEGORY_NOTIFICATIONS,
-                'label' => 'Notifications management'
+                'label' => 'rainlab.notify::lang.permissions.manage_notifications'
             ],
         ];
     }
