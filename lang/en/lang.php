@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'plugin' => [
+        'name' => 'Notify',
+        'description' => 'Notification services',
+    ],
     'notifications' => [
         'menu_label' => 'Notification rules',
         'menu_description' => 'Manage the events and actions that trigger notifications.',
