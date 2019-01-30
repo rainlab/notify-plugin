@@ -48,4 +48,14 @@ class Plugin extends PluginBase
             ],
         ];
     }
+
+    public function registerPermissions()
+    {
+        return [
+            'rainlab.notify.manage_notifications' => [
+                'tab' => SettingsManager::CATEGORY_NOTIFICATIONS,
+                'label' => 'rainlab.notify::lang.permissions.manage_notifications'
+            ],
+        ];
+    }
 }

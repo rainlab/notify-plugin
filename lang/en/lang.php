@@ -12,4 +12,7 @@ return [
     'action' => [
         'add_notification_action' => 'Add notification action',
     ],
+    'permissions' => [
+        'manage_notifications' => 'Notifications management',
+    ],
 ];
