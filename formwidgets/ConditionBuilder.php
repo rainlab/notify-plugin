@@ -6,6 +6,7 @@ use RainLab\Notify\Classes\ConditionBase;
 use ApplicationException;
 use ValidationException;
 use Exception;
+use Request;
 
 /**
  * Condition builder
@@ -348,12 +349,16 @@ class ConditionBuilder extends FormWidgetBase
 
         $cache[$condition->id] = json_encode($this->makeCacheConditionData($condition));
 
-        $_POST['condition_data'] = $cache;
+        $requestData = Request::all();
+        array_set($requestData, 'condition_data' , $cache);
+        Request::merge($requestData);
     }
 
     public function restoreCacheConditionDataPayload()
     {
-        $_POST['condition_data'] = json_decode(post('current_condition_data'), true);
+        $requestData = Request::all();
+        array_set($requestData, 'condition_data' , json_decode(post('current_condition_data'), true));
+        Request::merge($requestData);
     }
 
     public function getCacheConditionDataPayload()

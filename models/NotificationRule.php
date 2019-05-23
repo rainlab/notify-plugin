@@ -68,6 +68,7 @@ class NotificationRule extends Model
         $params = $this->getEventObject()->getParams();
         $rootCondition = $this->rule_conditions->first();
 
+
         if (!$rootCondition) {
             throw new ApplicationException('Notification rule is missing a root condition!');
         }
@@ -75,6 +76,7 @@ class NotificationRule extends Model
         if (!$rootCondition->getConditionObject()->isTrue($params)) {
             return false;
         }
+
 
         foreach ($this->rule_actions as $action) {
             $action->setRelation('notification_rule', $this);
