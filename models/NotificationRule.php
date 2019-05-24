@@ -68,12 +68,7 @@ class NotificationRule extends Model
         $params = $this->getEventObject()->getParams();
         $rootCondition = $this->rule_conditions->first();
 
-
-        if (!$rootCondition) {
-            throw new ApplicationException('Notification rule is missing a root condition!');
-        }
-
-        if (!$rootCondition->getConditionObject()->isTrue($params)) {
+        if ($rootCondition && !$rootCondition->getConditionObject()->isTrue($params)) {
             return false;
         }
 
@@ -190,7 +185,16 @@ class NotificationRule extends Model
         $dbRules = self::applyClass($eventClass)->get();
         $presets = (array) EventBase::findEventPresetsByClass($eventClass);
 
+        if ($dbRules->count() === 0) {
+            // It is the first time to init rainlab_notify_notification_rules and rainlab_notify_rule_actions
+            foreach ($presets as $code => $preset) {
+                self::createFromPreset($code, $preset);
+            }
+            $dbRules = self::applyClass($eventClass)->get();
+        }
+
         foreach ($dbRules as $dbRule) {
+
             if ($dbRule->code) {
                 unset($presets[$dbRule->code]);
             }

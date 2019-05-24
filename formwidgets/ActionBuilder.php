@@ -183,6 +183,8 @@ class ActionBuilder extends FormWidgetBase
 
         $this->model->rule_actions()->remove($action, post('_session_key'));
 
+        $action->delete();
+
         return $this->renderActions();
     }
 
@@ -260,7 +262,7 @@ class ActionBuilder extends FormWidgetBase
 
     public function getCacheActionDataPayload()
     {
-        return post('action_data');
+        return post('action_data', []);
     }
 
     //
