@@ -45,6 +45,7 @@ class RuleCondition extends Model
 
     public $belongsTo = [
         'parent' => [self::class, 'key' => 'rule_parent_id'],
+        'notification_rule'  => [NotificationRule::class, 'key'=>'rule_host_id']
     ];
 
     public function filterFields($fields, $context)
