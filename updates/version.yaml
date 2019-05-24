@@ -5,3 +5,4 @@
     - create_rule_conditions_table.php
     - create_rule_actions_table.php
 1.0.2: Fixes crashing bug.
+1.0.3: Fixes POST bug and supports the conditions settings in the preset config file
