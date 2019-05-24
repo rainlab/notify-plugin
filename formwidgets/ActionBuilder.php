@@ -183,8 +183,6 @@ class ActionBuilder extends FormWidgetBase
 
         $this->model->rule_actions()->remove($action, post('_session_key'));
 
-        $action->delete();
-
         return $this->renderActions();
     }
 
