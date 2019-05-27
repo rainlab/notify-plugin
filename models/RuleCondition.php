@@ -40,7 +40,7 @@ class RuleCondition extends Model
      * @var array Relations
      */
     public $hasMany = [
-        'children' => [self::class, 'key' => 'rule_parent_id'],
+        'children' => [self::class, 'key' => 'rule_parent_id', 'delete' => true],
     ];
 
     public $belongsTo = [
