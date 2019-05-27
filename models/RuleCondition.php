@@ -128,6 +128,16 @@ class RuleCondition extends Model
         $this->loadCustomData();
     }
 
+    public function afterSave()
+    {
+        // When user clicked the condition remove button and saved this rule, this condition will be removed
+        $sessionKey = post('_session_key');
+        $originalRuleParentId = $this->getOriginal('rule_parent_id');
+        if ( $originalRuleParentId && !$this->notification_rule()->withDeferred($sessionKey)->exists()) {
+            $this->delete();
+        }
+    }
+
     public function getText()
     {
         if (strlen($this->condition_text)) {
