@@ -88,8 +88,8 @@ class RuleAction extends Model
     {
         // When user clicked the action remove button and saved this rule, this action will be removed
         $sessionKey = post('_session_key');
-        $originalRuleHostId = $this->getOriginal('rule_host_id');
-        if ( $originalRuleHostId && !$this->notification_rule()->withDeferred($sessionKey)->exists()) {
+        $ruleHostIdHasRemoved = $this->rule_host_id === null && $this->getOriginal('rule_host_id');
+        if ($ruleHostIdHasRemoved  && !$this->notification_rule()->withDeferred($sessionKey)->exists()) {
             $this->delete();
         }
     }
