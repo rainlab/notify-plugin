@@ -349,16 +349,16 @@ class ConditionBuilder extends FormWidgetBase
 
         $cache[$condition->id] = json_encode($this->makeCacheConditionData($condition));
 
-        $requestData = Request::all();
-        array_set($requestData, 'condition_data' , $cache);
-        Request::merge($requestData);
+        Request::merge([
+            'condition_data' => $cache
+        ]);
     }
 
     public function restoreCacheConditionDataPayload()
     {
-        $requestData = Request::all();
-        array_set($requestData, 'condition_data' , json_decode(post('current_condition_data'), true));
-        Request::merge($requestData);
+        Request::merge([
+            'condition_data' => json_decode(post('current_condition_data', []), true)
+        ]);
     }
 
     public function getCacheConditionDataPayload()

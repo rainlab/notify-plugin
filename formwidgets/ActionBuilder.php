@@ -246,16 +246,16 @@ class ActionBuilder extends FormWidgetBase
 
         $cache[$action->id] = json_encode($this->makeCacheActionData($action));
 
-        $requestData = Request::all();
-        array_set($requestData, 'action_data' , $cache);
-        Request::merge($requestData);
+        Request::merge([
+            'action_data' => $cache
+        ]);
     }
 
     public function restoreCacheActionDataPayload()
     {
-        $requestData = Request::all();
-        array_set($requestData, 'action_data' , json_decode(post('current_action_data'), true));
-        Request::merge($requestData);
+        Request::merge([
+            'action_data' => json_decode(post('current_action_data', []), true)
+        ]);
     }
 
     public function getCacheActionDataPayload()
