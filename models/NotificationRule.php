@@ -73,7 +73,6 @@ class NotificationRule extends Model
             return false;
         }
 
-
         foreach ($this->rule_actions as $action) {
             $action->setRelation('notification_rule', $this);
             $action->triggerAction($params);
@@ -195,7 +194,6 @@ class NotificationRule extends Model
         }
 
         foreach ($dbRules as $dbRule) {
-
             if ($dbRule->code) {
                 unset($presets[$dbRule->code]);
             }
