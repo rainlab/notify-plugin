@@ -3,6 +3,7 @@
 use Model;
 use ApplicationException;
 use RainLab\Notify\Classes\EventBase;
+use RainLab\Notify\Classes\ConditionBase;
 
 /**
  * Notification rule
@@ -68,11 +69,7 @@ class NotificationRule extends Model
         $params = $this->getEventObject()->getParams();
         $rootCondition = $this->rule_conditions->first();
 
-        if (!$rootCondition) {
-            throw new ApplicationException('Notification rule is missing a root condition!');
-        }
-
-        if (!$rootCondition->getConditionObject()->isTrue($params)) {
+        if ($rootCondition && !$rootCondition->getConditionObject()->isTrue($params)) {
             return false;
         }
 
@@ -188,6 +185,14 @@ class NotificationRule extends Model
         $dbRules = self::applyClass($eventClass)->get();
         $presets = (array) EventBase::findEventPresetsByClass($eventClass);
 
+        if ($dbRules->count() === 0) {
+            // It is the first time to init rainlab_notify_notification_rules and rainlab_notify_rule_actions
+            foreach ($presets as $code => $preset) {
+                self::createFromPreset($code, $preset);
+            }
+            return self::applyClass($eventClass)->get();
+        }
+
         foreach ($dbRules as $dbRule) {
             if ($dbRule->code) {
                 unset($presets[$dbRule->code]);
@@ -261,6 +266,27 @@ class NotificationRule extends Model
             $newAction->notification_rule = $newRule;
             $newAction->fill($params);
             $newAction->forceSave();
+        }
+
+        // conditions
+        $conditions =  array_get($preset, 'conditions');
+        if (!$conditions || !is_array($conditions)) {
+            return $newRule;
+        }
+        // the root CompoundCondition condition
+        $rootCondition = new RuleCondition();
+        $rootCondition->rule_host_type = ConditionBase::TYPE_ANY;
+        $rootCondition->class_name = $rootCondition->getRootConditionClass();
+        $rootCondition->notification_rule = $newRule;
+        $rootCondition->save();
+
+        foreach ($conditions as $condition) {
+            $params = array_except($condition, 'condition');
+            $newCondition = new RuleCondition();
+            $newCondition->class_name = array_get($condition, 'condition');
+            $newCondition->parent = $rootCondition;
+            $newCondition->fill($params);
+            $newCondition->forceSave();
         }
 
         return $newRule;

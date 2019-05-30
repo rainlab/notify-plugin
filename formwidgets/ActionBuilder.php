@@ -6,6 +6,7 @@ use RainLab\Notify\Classes\ActionBase;
 use ApplicationException;
 use ValidationException;
 use Exception;
+use Request;
 
 /**
  * Action builder
@@ -245,17 +246,21 @@ class ActionBuilder extends FormWidgetBase
 
         $cache[$action->id] = json_encode($this->makeCacheActionData($action));
 
-        $_POST['action_data'] = $cache;
+        Request::merge([
+            'action_data' => $cache
+        ]);
     }
 
     public function restoreCacheActionDataPayload()
     {
-        $_POST['action_data'] = json_decode(post('current_action_data'), true);
+        Request::merge([
+            'action_data' => json_decode(post('current_action_data', []), true)
+        ]);
     }
 
     public function getCacheActionDataPayload()
     {
-        return post('action_data');
+        return post('action_data', []);
     }
 
     //

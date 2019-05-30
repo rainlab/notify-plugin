@@ -40,11 +40,12 @@ class RuleCondition extends Model
      * @var array Relations
      */
     public $hasMany = [
-        'children' => [self::class, 'key' => 'rule_parent_id'],
+        'children' => [self::class, 'key' => 'rule_parent_id', 'delete' => true],
     ];
 
     public $belongsTo = [
         'parent' => [self::class, 'key' => 'rule_parent_id'],
+        'notification_rule'  => [NotificationRule::class, 'key'=>'rule_host_id']
     ];
 
     public function filterFields($fields, $context)
@@ -125,6 +126,16 @@ class RuleCondition extends Model
     {
         $this->applyConditionClass();
         $this->loadCustomData();
+    }
+
+    public function afterSave()
+    {
+        // When user clicked the condition remove button and saved this rule, this condition will be removed
+        $sessionKey = post('_session_key');
+        $ruleParentIdHasRemoved = $this->rule_parent_id === null && $this->getOriginal('rule_parent_id');
+        if ($ruleParentIdHasRemoved && !$this->notification_rule()->withDeferred($sessionKey)->exists()) {
+            $this->delete();
+        }
     }
 
     public function getText()
