@@ -128,7 +128,7 @@ class ExecutionContextCondition extends ConditionBase
         if ($attribute == 'locale') {
             return array_get($params, 'appLocale') == $conditionValue;
         } else if ($attribute === 'environment') {
-            return $conditionValue === env('APP_ENV');
+            return $conditionValue === \App::environment();
         }
 
         return false;
