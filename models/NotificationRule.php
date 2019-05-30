@@ -185,14 +185,6 @@ class NotificationRule extends Model
         $dbRules = self::applyClass($eventClass)->get();
         $presets = (array) EventBase::findEventPresetsByClass($eventClass);
 
-        if ($dbRules->count() === 0) {
-            // It is the first time to init rainlab_notify_notification_rules and rainlab_notify_rule_actions
-            foreach ($presets as $code => $preset) {
-                self::createFromPreset($code, $preset);
-            }
-            return self::applyClass($eventClass)->get();
-        }
-
         foreach ($dbRules as $dbRule) {
             if ($dbRule->code) {
                 unset($presets[$dbRule->code]);
@@ -209,7 +201,7 @@ class NotificationRule extends Model
             }
         }
 
-        return $dbRules;
+        return $results;
     }
 
     /**
@@ -258,6 +250,7 @@ class NotificationRule extends Model
         $newRule->class_name = array_get($preset, 'event');
         $newRule->forceSave();
 
+        // Add the actions
         foreach ($actions as $action) {
             $params = array_except($action, 'action');
 
@@ -268,18 +261,20 @@ class NotificationRule extends Model
             $newAction->forceSave();
         }
 
-        // conditions
-        $conditions =  array_get($preset, 'conditions');
+        // Add the conditions
+        $conditions = array_get($preset, 'conditions');
         if (!$conditions || !is_array($conditions)) {
             return $newRule;
         }
-        // the root CompoundCondition condition
+
+        // Create the root condition
         $rootCondition = new RuleCondition();
         $rootCondition->rule_host_type = ConditionBase::TYPE_ANY;
         $rootCondition->class_name = $rootCondition->getRootConditionClass();
         $rootCondition->notification_rule = $newRule;
         $rootCondition->save();
 
+        // Add the sub conditions
         foreach ($conditions as $condition) {
             $params = array_except($condition, 'condition');
             $newCondition = new RuleCondition();

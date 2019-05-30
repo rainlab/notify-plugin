@@ -86,10 +86,9 @@ class RuleAction extends Model
 
     public function afterSave()
     {
-        // When user clicked the action remove button and saved this rule, this action will be removed
-        $sessionKey = post('_session_key');
-        $ruleHostIdHasRemoved = $this->rule_host_id === null && $this->getOriginal('rule_host_id');
-        if ($ruleHostIdHasRemoved  && !$this->notification_rule()->withDeferred($sessionKey)->exists()) {
+        // Make sure that this record is removed from the DB after being removed from a rule
+        $removedFromRule = $this->rule_host_id === null && $this->getOriginal('rule_host_id');
+        if ($removedFromRule && !$this->notification_rule()->withDeferred(post('_session_key'))->exists()) {
             $this->delete();
         }
     }

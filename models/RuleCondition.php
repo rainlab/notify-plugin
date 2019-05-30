@@ -130,10 +130,9 @@ class RuleCondition extends Model
 
     public function afterSave()
     {
-        // When user clicked the condition remove button and saved this rule, this condition will be removed
-        $sessionKey = post('_session_key');
-        $ruleParentIdHasRemoved = $this->rule_parent_id === null && $this->getOriginal('rule_parent_id');
-        if ($ruleParentIdHasRemoved && !$this->notification_rule()->withDeferred($sessionKey)->exists()) {
+        // Make sure that this record is removed from the DB after being removed from a rule
+        $removedFromRule = $this->rule_parent_id === null && $this->getOriginal('rule_parent_id');
+        if ($removedFromRule && !$this->notification_rule()->withDeferred(post('_session_key'))->exists()) {
             $this->delete();
         }
     }

@@ -78,15 +78,15 @@ welcome_email:
     name: Send welcome email to user
     event: RainLab\User\NotifyRules\UserRegisteredEvent
     items:
-        -   action: RainLab\Notify\NotifyRules\SendMailTemplateAction
-            mail_template: rainlab.user::welcome
-            send_to_mode: user
+        - action: RainLab\Notify\NotifyRules\SendMailTemplateAction
+          mail_template: rainlab.user::welcome
+          send_to_mode: user
     conditions:
-        -   condition: RainLab\Notify\NotifyRules\ExecutionContextCondition
-            subcondition: environment
-            operator: is
-            value: dev
-            condition_text: Application environment <span class="operator">is</span> dev
+        - condition: RainLab\Notify\NotifyRules\ExecutionContextCondition
+          subcondition: environment
+          operator: is
+          value: dev
+          condition_text: Application environment <span class="operator">is</span> dev
 ```
 
 ## Creating Event classes
