@@ -84,6 +84,15 @@ class RuleAction extends Model
         $this->setCustomData();
     }
 
+    public function afterSave()
+    {
+        // Make sure that this record is removed from the DB after being removed from a rule
+        $removedFromRule = $this->rule_host_id === null && $this->getOriginal('rule_host_id');
+        if ($removedFromRule && !$this->notification_rule()->withDeferred(post('_session_key'))->exists()) {
+            $this->delete();
+        }
+    }
+
     public function applyCustomData()
     {
         $this->setCustomData();
