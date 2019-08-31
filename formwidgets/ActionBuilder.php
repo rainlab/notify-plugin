@@ -254,7 +254,7 @@ class ActionBuilder extends FormWidgetBase
     public function restoreCacheActionDataPayload()
     {
         Request::merge([
-            'action_data' => json_decode(post('current_action_data', []), true)
+            'action_data' => json_decode(post('current_action_data'), true)
         ]);
     }
 
