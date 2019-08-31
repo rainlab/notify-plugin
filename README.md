@@ -79,7 +79,7 @@ welcome_email:
     event: RainLab\User\NotifyRules\UserRegisteredEvent
     items:
         - action: RainLab\Notify\NotifyRules\SendMailTemplateAction
-          mail_template: rainlab.user::welcome
+          mail_template: rainlab.user::mail.welcome
           send_to_mode: user
     conditions:
         - condition: RainLab\Notify\NotifyRules\ExecutionContextCondition
