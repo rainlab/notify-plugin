@@ -5,3 +5,4 @@
     - create_rule_conditions_table.php
     - create_rule_actions_table.php
 1.0.2: Fixes crashing bug.
+1.0.3: Added Turkish & Russian translations, various bug fixes.
