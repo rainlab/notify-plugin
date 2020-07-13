@@ -3,10 +3,9 @@
 use Str;
 use Yaml;
 use File;
-use Event;
+use Lang;
 use System\Classes\PluginManager;
 use October\Rain\Extension\ExtensionBase;
-use RainLab\Notify\Classes\Notifier;
 use RainLab\Notify\Interfaces\Event as EventInterface;
 
 /**
@@ -97,12 +96,12 @@ class EventBase extends ExtensionBase implements EventInterface
 
     public function getEventName()
     {
-        return array_get($this->eventDetails(), 'name');
+        return Lang::get(array_get($this->eventDetails(), 'name'));
     }
 
     public function getEventDescription()
     {
-        return array_get($this->eventDetails(), 'description');
+        return Lang::get(array_get($this->eventDetails(), 'description'));
     }
 
     public function getEventGroup()

@@ -1,7 +1,7 @@
 <?php namespace RainLab\Notify\Models;
 
+use Lang;
 use Model;
-use ApplicationException;
 use RainLab\Notify\Classes\EventBase;
 use RainLab\Notify\Classes\ConditionBase;
 
@@ -116,7 +116,7 @@ class NotificationRule extends Model
         }
 
         $this->class_name = $class;
-        $this->event_name = array_get($this->eventDetails(), 'name', 'Unknown');
+        $this->event_name = Lang::get(array_get($this->eventDetails(), 'name', 'Unknown'));
         return true;
     }
 

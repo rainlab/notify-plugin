@@ -16,8 +16,8 @@
 
                             <li>
                                 <a href="<?= Backend::url('rainlab/notify/notifications/create/'.$event->getEventIdentifier()) ?>">
-                                    <h5 class="heading"><?= e($event->getEventName()) ?></h5>
-                                    <p class="description"><?= e($event->getEventDescription()) ?></p>
+                                    <h5 class="heading"><?= e(trans($event->getEventName())) ?></h5>
+                                    <p class="description"><?= e(trans($event->getEventDescription())) ?></p>
                                 </a>
                             </li>
 
