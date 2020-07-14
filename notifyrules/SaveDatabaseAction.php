@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class SaveDatabaseAction extends ActionBase
 {
-    protected $tableDefinitions;
+    protected $tableDefinitions = [];
 
     /**
      * Returns information about this event, including name and description.
