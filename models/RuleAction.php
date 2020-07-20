@@ -45,7 +45,7 @@ class RuleAction extends Model
         'notification_rule' => [NotificationRule::class, 'key' => 'rule_host_id'],
     ];
 
-    public function triggerAction($params, $scheduled=true)
+    public function triggerAction($params, $scheduled = true)
     {
         try {
             $actionObject = $this->getActionObject();
