@@ -126,7 +126,9 @@ class RuleAction extends Model
 
         $metaAttributes = [
             'action_text',
-            'schedule_type', 'schedule_delay', 'schedule_delay_factor'
+            'schedule_type',
+            'schedule_delay',
+            'schedule_delay_factor',
         ];
 
         $formAttributes = [];
