@@ -159,7 +159,7 @@ class ActionBuilder extends FormWidgetBase
 
             $data = $this->getCacheActionAttributes($action);
 
-            if (! is_null($this->actionFormWidget)) {
+            if (!is_null($this->actionFormWidget)) {
                 $this->actionFormWidget->setFormValues($data);
             }
             $this->actionScheduleFormWidget->setFormValues($data);
