@@ -3,6 +3,7 @@
 use Ramsey\Uuid\Uuid;
 use RainLab\Notify\Classes\ActionBase;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use ApplicationException;
 
 class SaveDatabaseAction extends ActionBase
 {
