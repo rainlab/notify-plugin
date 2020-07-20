@@ -164,7 +164,7 @@ class RuleAction extends Model
 
     public function getSchedule()
     {
-        if ($this->schedule_type != 'delayed') {
+        if ($this->schedule_type !== 'delayed') {
             return false;
         }
 
