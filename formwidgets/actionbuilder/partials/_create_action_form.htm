@@ -23,8 +23,8 @@
                                     data-request="<?= $this->getEventHandler('onCreateAction') ?>"
                                     data-request-data="action_class: '<?= addslashes($class) ?>'"
                                     data-popup-load-indicator>
-                                    <h5 class="heading"><?= e($action->getActionName()) ?></h5>
-                                    <p class="description"><?= e($action->getActionDescription()) ?></p>
+                                    <h5 class="heading"><?= e(trans($action->getActionName())) ?></h5>
+                                    <p class="description"><?= e(trans($action->getActionDescription())) ?></p>
                                 </a>
                             </li>
 
