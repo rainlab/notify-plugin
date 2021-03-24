@@ -60,15 +60,17 @@ function showActionSettings(id) {
     RuleActions.prototype.onShowNewActionSettings = function(actionId) {
         var $el = $('[data-action-id='+actionId+']')
 
+        var popup_size = 'giant';
         // Action does not use settings
         if ($el.hasClass('no-form')) {
-            return
+            // Popup will contain scheduling option only
+            popup_size = 'medium'
         }
 
         $el.popup({
             handler: this.options.settingsHandler,
             extraData: { current_action_id: actionId },
-            size: 'giant'
+            size: popup_size
         })
 
         // This will not fire on successful save because the target element
@@ -91,15 +93,16 @@ function showActionSettings(id) {
         var $el = $(event.target),
             actionId = getActionIdFromElement($el)
 
+        var popup_size = 'giant';
         // Action does not use settings
         if ($el.closest('li.action-item').hasClass('no-form')) {
-            return
+            popup_size = 'medium'
         }
 
         $el.popup({
             handler: this.options.settingsHandler,
             extraData: { current_action_id: actionId },
-            size: 'giant'
+            size: popup_size
         })
 
         return false
