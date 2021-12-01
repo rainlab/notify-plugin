@@ -85,6 +85,7 @@ class ConditionBuilder extends FormWidgetBase
      */
     public function prepareVars()
     {
+        $this->vars['name'] = $this->getFieldName();
         $this->vars['rootCondition'] = $this->getConditionsRoot();
         $this->vars['conditionFormWidget'] = $this->conditionFormWidget;
     }

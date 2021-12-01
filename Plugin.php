@@ -29,7 +29,8 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-bullhorn',
                 'url'         => Backend::url('rainlab/notify/notifications'),
                 'permissions' => ['rainlab.notify.manage_notifications'],
-                'order'       => 600
+                'order'       => 600,
+                'keywords'    => 'notify'
             ],
         ];
     }

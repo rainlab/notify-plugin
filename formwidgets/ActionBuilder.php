@@ -71,6 +71,7 @@ class ActionBuilder extends FormWidgetBase
      */
     public function prepareVars()
     {
+        $this->vars['name'] = $this->getFieldName();
         $this->vars['formModel'] = $this->model;
         $this->vars['actions'] = $this->getActions();
         $this->vars['actionFormWidget'] = $this->actionFormWidget;

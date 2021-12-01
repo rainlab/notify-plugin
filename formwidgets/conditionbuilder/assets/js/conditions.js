@@ -44,7 +44,7 @@ function showConditionSettings(id) {
 
         this.$el = null
 
-        // In some cases options could contain callbacks, 
+        // In some cases options could contain callbacks,
         // so it's better to clean them up too.
         this.options = null
 
