@@ -8,3 +8,4 @@ v1.0.2: Fixes crashing bug.
 v1.0.3: Added Turkish & Russian translations, various bug fixes.
 v1.1.0: Fixes support for October CMS 2.0
 v1.1.1: Fixes missing template bug when saving notification rule
+v1.1.2: Fixes collisions with language keys in compose mail action

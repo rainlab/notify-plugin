@@ -161,7 +161,14 @@ class SendMailTemplateAction extends ActionBase
     public function getMailTemplateOptions()
     {
         $codes = array_keys(MailTemplate::listAllTemplates());
+
         $result = array_combine($codes, $codes);
+
+        // Wrap to prevent collisions with language keys
+        array_walk($result, function(&$value, $key) {
+            $value = "[$value]";
+        });
+
         return $result;
     }
 
