@@ -60,7 +60,7 @@ class ModelAttributesConditionBase extends ConditionBase
     //
 
     /**
-     * This function should return one of the `ConditionBase::TYPE_*` constants 
+     * This function should return one of the `ConditionBase::TYPE_*` constants
      * depending on a place where the condition is valid
      */
     public function getConditionType()
@@ -312,7 +312,7 @@ class ModelAttributesConditionBase extends ConditionBase
         $controlType = $this->evalControlType();
 
         $this->getModelObj()
-            ->where('id', $host->id)
+            ->where('id', $hostObj->id)
             ->update(['condition_control_type' => $controlType]);
 
         return $hostObj->condition_control_type = $controlType;
