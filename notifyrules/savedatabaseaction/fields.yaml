@@ -4,5 +4,5 @@
 
 fields:
     related_object:
-        label: Related object
+        label: rainlab.notify::lang.save_database.related_object
         type: dropdown

@@ -31,8 +31,8 @@ class ActionBase extends ExtensionBase implements ActionInterface
     public function actionDetails()
     {
         return [
-            'name'        => 'Action',
-            'description' => 'Action description',
+            'name'        => /*Action*/'rainlab.notify::lang.action.name',
+            'description' => /*Action description*/'rainlab.notify::lang.action.description',
             'icon'        => 'icon-dot-circle-o'
         ];
     }

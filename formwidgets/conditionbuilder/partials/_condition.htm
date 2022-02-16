@@ -29,7 +29,7 @@
                 <?php if (!$isRoot): ?>
                     <a
                         href="javascript:;"
-                        title="Delete condition"
+                        title="<?= e(trans('rainlab.notify::lang.condition.delete_condition')) ?>"
                         class="condition-delete condition-delete-compound close"
                         data-conditions-delete>
                         <span aria-hidden="true">&times;</span>
@@ -63,7 +63,7 @@
                 href="javascript:;"
                 data-conditions-create
                 data-request="onLoadConditionChildSelector">
-                Add condition
+                <?= e(trans('rainlab.notify::lang.condition.add_condition')) ?>
             </a>
         </div>
 
@@ -76,7 +76,7 @@
         </div>
         <a
             href="javascript:;"
-            title="Delete condition"
+            title="<?= e(trans('rainlab.notify::lang.condition.delete_condition')) ?>"
             class="condition-delete close"
             data-conditions-delete>
             <span aria-hidden="true">&times;</span>

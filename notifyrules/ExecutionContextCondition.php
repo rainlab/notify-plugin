@@ -6,18 +6,18 @@ use RainLab\Notify\Classes\ConditionBase;
 class ExecutionContextCondition extends ConditionBase
 {
     protected $operators = [
-        'is' => 'is',
-        'is_not' => 'is not',
+        'is' => /*is*/'rainlab.notify::lang.context.is',
+        'is_not' => /*is not*/'rainlab.notify::lang.context.is_not',
     ];
 
     public function getName()
     {
-        return 'Event is triggered from environment';
+        return /*Event is triggered from environment*/trans('rainlab.notify::lang.context.name');
     }
 
     public function getTitle()
     {
-        return 'Execution context';
+        return /*Execution context*/trans('rainlab.notify::lang.context.title');
     }
 
     public function getText()
@@ -28,8 +28,7 @@ class ExecutionContextCondition extends ConditionBase
         $subconditions = $this->getSubconditionOptions();
 
         $result = array_get($subconditions, $attribute, 'Execution context');
-        $result .= ' <span class="operator">'.array_get($this->operators, $host->operator, $host->operator).'</span> ';
-
+        $result .= ' <span class="operator">'.trans(array_get($this->operators, $host->operator, $host->operator)).'</span> ';
         if ($attribute == 'locale' || $attribute == 'environment') {
             $result .= strtolower($value) ?: '?';
         }
@@ -50,7 +49,7 @@ class ExecutionContextCondition extends ConditionBase
      */
     public function getGroupingTitle()
     {
-        return 'Execution context';
+        return /*Execution context*/trans('rainlab.notify::lang.context.title');
     }
 
     public function listSubconditions()
@@ -82,9 +81,9 @@ class ExecutionContextCondition extends ConditionBase
 
         if ($attribute == 'context') {
             $result = [
-                'backend' => 'Back-end area',
-                'front' => 'Front-end website',
-                'console' => 'Command line interface',
+                'backend' => /*Back-end area*/trans('rainlab.notify::lang.context.backend'),
+                'front' => /*Front-end website*/trans('rainlab.notify::lang.context.front'),
+                'console' => /*Command line interface*/trans('rainlab.notify::lang.context.console'),
             ];
         }
 
@@ -100,10 +99,10 @@ class ExecutionContextCondition extends ConditionBase
     public function getSubconditionOptions()
     {
         return [
-            'environment' => 'Application environment',
-            'context'     => 'Request context',
-            'theme'       => 'Active theme',
-            'locale'      => 'Visitor locale',
+            'environment' => /*Application environment*/trans('rainlab.notify::lang.context.environment'),
+            'context'     => /*Request context*/trans('rainlab.notify::lang.context.context'),
+            'theme'       => /*Active theme*/trans('rainlab.notify::lang.context.theme'),
+            'locale'      => /*Visitor locale*/trans('rainlab.notify::lang.context.locale'),
         ];
     }
 

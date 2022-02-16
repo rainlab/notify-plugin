@@ -12,11 +12,11 @@ use ApplicationException;
 class SendMailTemplateAction extends ActionBase
 {
     public $recipientModes = [
-        'system'  => 'System default',
-        'user'    => 'User email address (if applicable)',
-        'sender'  => 'Sender user email address (if applicable)',
-        'admin'   => 'Back-end administrators',
-        'custom'  => 'Specific email address',
+        'system'  => /*System default*/'rainlab.notify::lang.send_mail.system',
+        'user'    => /*User email address (if applicable*/'rainlab.notify::lang.send_mail.user',
+        'sender'  => /*Sender user email address (if applicable*/'rainlab.notify::lang.send_mail.sender',
+        'admin'   => /*Back-end administrators*/'rainlab.notify::lang.send_mail.admin',
+        'custom'  => /*Specific email address*/'rainlab.notify::lang.send_mail.custom'
     ];
 
     /**
@@ -25,8 +25,8 @@ class SendMailTemplateAction extends ActionBase
     public function actionDetails()
     {
         return [
-            'name'        => 'Compose a mail message',
-            'description' => 'Send a message to a recipient',
+            'name'        => /*Compose a mail message*/trans('rainlab.notify::lang.send_mail.name'),
+            'description' => /*Send a message to a recipient*/trans('rainlab.notify::lang.send_mail.description'),
             'icon'        => 'icon-envelope'
         ];
     }
@@ -108,23 +108,24 @@ class SendMailTemplateAction extends ActionBase
                     $adminText = '?';
                 }
 
-                $adminText .= ' admin group';
+                $adminText .= /* admin group*/trans('rainlab.notify::lang.send_mail.admin_group');
             }
             else {
-                $adminText = 'all admins';
+                $adminText = /*all admins*/trans('rainlab.notify::lang.send_mail.admin_all');
             }
             return sprintf(
-                'Send a message to %s using template %s',
+                /*Send a message to %s using template %s*/trans('rainlab.notify::lang.send_mail.send_message'),
                 $adminText,
                 $hostObj->mail_template
             );
         }
 
         if ($hostObj->mail_template) {
+
             return sprintf(
-                'Send a message to %s using template %s',
-                mb_strtolower($recipient),
-                $hostObj->mail_template
+                /*Send a message to %s using template %s*/trans('rainlab.notify::lang.send_mail.send_message'),
+                trans(mb_strtolower($recipient)),
+                trans($hostObj->mail_template)
             );
         }
 
@@ -133,7 +134,7 @@ class SendMailTemplateAction extends ActionBase
 
     public function getSendToAdminOptions()
     {
-        $options = ['' => '- All administrators -'];
+        $options = ['' => /*- All administrators -*/trans('rainlab.notify::lang.send_mail.all_admin_group')];
 
         $groups = AdminGroupModel::lists('name', 'id');
 

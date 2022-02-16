@@ -3,7 +3,7 @@
         <li>
             <div class="no-hover">
                 <div class="icons">
-                    <span class="icon">ON</span>
+                    <span class="icon"><?= e(trans('rainlab.notify::lang.action.on')) ?></span>
                     <span class="icon"><i class="icon-user"></i></span>
                 </div>
                 <div class="content">
@@ -22,7 +22,7 @@
         data-control="popup"
         data-handler="<?= $this->getEventHandler('onLoadCreateActionForm') ?>"
         class="menu-control">
-        <i class="icon-plus"></i> Add action
+        <i class="icon-plus"></i> <?= e(trans('rainlab.notify::lang.action.add_action')) ?>
     </a>
 </div>
 

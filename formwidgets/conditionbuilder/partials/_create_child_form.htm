@@ -2,7 +2,7 @@
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>
-        <h4 class="modal-title">Condition</h4>
+        <h4 class="modal-title"><?= e(trans('rainlab.notify::lang.condition.name')) ?></h4>
     </div>
 
     <?php if (!$this->fatalError): ?>
@@ -12,10 +12,10 @@
 
         <div class="modal-body">
             <div class="form-group condition-class">
-                <label>Condition</label>
+                <label><?= e(trans('rainlab.notify::lang.condition.name')) ?></label>
                 <select
                     class="form-control custom-select"
-                    data-placeholder="Please select a condition"
+                    data-placeholder="<?= e(trans('rainlab.notify::lang.condition.please_select_condition')) ?>"
                     name="condition_class">
                     <option value=""></option>
                     <?php foreach ($options as $name => $class): ?>

@@ -101,7 +101,7 @@ class ConditionBase extends ExtensionBase implements ConditionInterface
 
     public function getText()
     {
-        return 'Condition text';
+        return /*Condition text*/trans('rainlab.notify::lang.condition.text');
     }
 
     /**
@@ -109,7 +109,7 @@ class ConditionBase extends ExtensionBase implements ConditionInterface
      */
     public function getName()
     {
-        return 'Condition';
+        return /*Condition*/trans('rainlab.notify::lang.condition.name');
     }
 
     /**
@@ -117,7 +117,7 @@ class ConditionBase extends ExtensionBase implements ConditionInterface
      */
     public function getTitle()
     {
-        return 'Condition';
+        return /*Condition*/trans('rainlab.notify::lang.condition.name');
     }
 
     /**

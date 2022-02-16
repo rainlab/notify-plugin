@@ -4,12 +4,12 @@
 
 fields:
     mail_template:
-        label: Mail template
+        label: rainlab.notify::lang.send_mail.mail_template
         type: dropdown
-        placeholder: Select template
+        placeholder: rainlab.notify::lang.send_mail.mail_template_placeholder
 
     send_to_mode:
-        label: Send to
+        label: rainlab.notify::lang.send_mail.send_to_mode
         type: radio
         span: left
 
@@ -21,7 +21,7 @@ fields:
             condition: value[custom]
 
     send_to_admin:
-        label: Send to admin group
+        label: rainlab.notify::lang.send_mail.send_to_admin
         span: right
         type: dropdown
         trigger:
@@ -30,7 +30,7 @@ fields:
             condition: value[admin]
 
     reply_to_mode:
-        label: Reply-to address
+        label: rainlab.notify::lang.send_mail.reply_to_mode
         type: radio
         span: left
 
