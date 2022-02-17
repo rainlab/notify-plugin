@@ -312,7 +312,7 @@ class ModelAttributesConditionBase extends ConditionBase
         $controlType = $this->evalControlType();
 
         $this->getModelObj()
-            ->where('id', $host->id)
+            ->where('id', $hostObj->id)
             ->update(['condition_control_type' => $controlType]);
 
         return $hostObj->condition_control_type = $controlType;
