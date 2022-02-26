@@ -12,8 +12,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name'        => 'Notify',
-            'description' => 'Notification services',
+            'name'        => 'rainlab.notify::lang.plugin.name',
+            'description' => 'rainlab.notify::lang.plugin.description',
             'author'      => 'Alexey Bobkov, Samuel Georges',
             'icon'        => 'icon-bullhorn'
         ];
@@ -29,7 +29,8 @@ class Plugin extends PluginBase
                 'icon'        => 'icon-bullhorn',
                 'url'         => Backend::url('rainlab/notify/notifications'),
                 'permissions' => ['rainlab.notify.manage_notifications'],
-                'order'       => 600
+                'order'       => 600,
+                'keywords'    => 'notify'
             ],
         ];
     }
@@ -45,6 +46,16 @@ class Plugin extends PluginBase
             ],
             'conditions' => [
                 \RainLab\Notify\NotifyRules\ExecutionContextCondition::class,
+            ],
+        ];
+    }
+
+    public function registerPermissions()
+    {
+        return [
+            'rainlab.notify.manage_notifications' => [
+                'tab' => SettingsManager::CATEGORY_NOTIFICATIONS,
+                'label' => 'rainlab.notify::lang.permissions.manage_notifications'
             ],
         ];
     }

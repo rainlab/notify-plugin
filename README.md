@@ -21,342 +21,380 @@ When a notification fires, it uses the following workflow:
 
 Here is an example of a plugin registering notification rules. The `groups` definition will create containers that are used to better organise events. The `presets` definition specifies notification rules defined by the system.
 
-    public function registerNotificationRules()
-    {
-        return [
-            'events' => [
-                \RainLab\User\NotifyRules\UserActivatedEvent::class,
+```php
+public function registerNotificationRules()
+{
+    return [
+        'events' => [
+            \RainLab\User\NotifyRules\UserActivatedEvent::class,
+        ],
+        'actions' => [
+            \RainLab\User\NotifyRules\SaveToDatabaseAction::class,
+        ],
+        'conditions' => [
+            \RainLab\User\NotifyRules\UserAttributeCondition::class
+        ],
+        'groups' => [
+            'user' => [
+                'label' => 'User',
+                'icon' => 'icon-user'
             ],
-            'actions' => [
-                \RainLab\User\NotifyRules\SaveToDatabaseAction::class,
-            ],
-            'conditions' => [
-                \RainLab\User\NotifyRules\UserAttributeCondition::class
-            ],
-            'groups' => [
-                'user' => [
-                    'label' => 'User',
-                    'icon' => 'icon-user'
-                ],
-            ],
-            'presets' => '$/rainlab/user/config/notify_presets.yaml',
-        ];
-    }
+        ],
+        'presets' => '$/rainlab/user/config/notify_presets.yaml',
+    ];
+}
+```
 
 Here is an example of triggering a notification. The system event `rainlab.user.activate` is bound to the `UserActivatedEvent` class.
 
-    // Bind to a system event
-    \RainLab\Notify\Classes\Notifier::bindEvents([
-        'rainlab.user.activate' => \RainLab\User\NotifyRules\UserActivatedEvent::class
-    ]);
+```php
+// Bind to a system event
+\RainLab\Notify\Classes\Notifier::bindEvents([
+    'rainlab.user.activate' => \RainLab\User\NotifyRules\UserActivatedEvent::class
+]);
 
-    // Fire the system event
-    Event::fire('rainlab.user.activate', [$this]);
+// Fire the system event
+Event::fire('rainlab.user.activate', [$this]);
+```
 
 Here is an example of registering context parameters, which are available globally to all notifications.
 
-    \RainLab\Notify\Classes\Notifier::instance()->registerCallback(function($manager) {
-        $manager->registerGlobalParams([
-            'user' => Auth::getUser()
-        ]);
-    });
+```php
+\RainLab\Notify\Classes\Notifier::instance()->registerCallback(function($manager) {
+    $manager->registerGlobalParams([
+        'user' => Auth::getUser()
+    ]);
+});
+```
 
 Here is an example of an event preset:
 
-    # ===================================
-    #  Event Presets
-    # ===================================
+```yaml
+# ===================================
+#  Event Presets
+# ===================================
 
-    welcome_email:
-        name: Send welcome email to user
-        event: RainLab\User\NotifyRules\UserRegisteredEvent
-        items:
-            - action: RainLab\Notify\NotifyRules\SendMailTemplateAction
-              mail_template: rainlab.user::welcome
-              send_to_mode: user
+welcome_email:
+    name: Send welcome email to user
+    event: RainLab\User\NotifyRules\UserRegisteredEvent
+    items:
+        - action: RainLab\Notify\NotifyRules\SendMailTemplateAction
+          mail_template: rainlab.user::mail.welcome
+          send_to_mode: user
+    conditions:
+        - condition: RainLab\Notify\NotifyRules\ExecutionContextCondition
+          subcondition: environment
+          operator: is
+          value: dev
+          condition_text: Application environment <span class="operator">is</span> dev
+```
 
 ## Creating Event classes
 
 An event class is responsible for preparing the parameters passed to the conditions and actions. The static method `makeParamsFromEvent` will take the arguments provided by the system event and convert them in to parameters.
 
-    class UserActivatedEvent extends \RainLab\Notify\Classes\EventBase
+```php
+class UserActivatedEvent extends \RainLab\Notify\Classes\EventBase
+{
+    /**
+     * @var array Local conditions supported by this event.
+        */
+    public $conditions = [
+        \RainLab\User\NotifyRules\UserAttributeCondition::class
+    ];
+
+    /**
+     * Returns information about this event, including name and description.
+     */
+    public function eventDetails()
     {
-        /**
-         * @var array Local conditions supported by this event.
-         */
-        public $conditions = [
-            \RainLab\User\NotifyRules\UserAttributeCondition::class
+        return [
+            'name'        => 'Activated',
+            'description' => 'A user is activated',
+            'group'       => 'user'
         ];
-
-        /**
-         * Returns information about this event, including name and description.
-         */
-        public function eventDetails()
-        {
-            return [
-                'name'        => 'Activated',
-                'description' => 'A user is activated',
-                'group'       => 'user'
-            ];
-        }
-
-        /**
-         * Defines the usable parameters provided by this class.
-         */
-        public function defineParams()
-        {
-            return [
-                'name' => [
-                    'title' => 'Name',
-                    'label' => 'Name of the user',
-                ],
-                // ...
-            ];
-        }
-
-        public static function makeParamsFromEvent(array $args, $eventName = null)
-        {
-            return [
-                'user' => array_get($args, 0)
-            ];
-        }
     }
+
+    /**
+     * Defines the usable parameters provided by this class.
+     */
+    public function defineParams()
+    {
+        return [
+            'name' => [
+                'title' => 'Name',
+                'label' => 'Name of the user',
+            ],
+            // ...
+        ];
+    }
+
+    public static function makeParamsFromEvent(array $args, $eventName = null)
+    {
+        return [
+            'user' => array_get($args, 0)
+        ];
+    }
+}
+```
 
 ## Creating Action classes
 
 Action classes define the final step in a notification and subsequently perform the notification itself. Some examples might be sending and email or writing to the database.
 
-    class SendMailTemplateAction extends \RainLab\Notify\Classes\ActionBase
+```php
+class SendMailTemplateAction extends \RainLab\Notify\Classes\ActionBase
+{
+    /**
+     * Returns information about this event, including name and description.
+     */
+    public function actionDetails()
     {
-        /**
-         * Returns information about this event, including name and description.
-         */
-        public function actionDetails()
-        {
-            return [
-                'name'        => 'Compose a mail message',
-                'description' => 'Send a message to a recipient',
-                'icon'        => 'icon-envelope'
-            ];
-        }
-
-        /**
-         * Field configuration for the action.
-         */
-        public function defineFormFields()
-        {
-            return 'fields.yaml';
-        }
-
-        public function getText()
-        {
-            $template = $this->host->template_name;
-
-            return 'Send a message using '.$template;
-        }
-
-        /**
-         * Triggers this action.
-         * @param array $params
-         * @return void
-         */
-        public function triggerAction($params)
-        {
-            $email = 'test@email.tld';
-            $template = $this->host->template_name;
-
-            Mail::sendTo($email, $template, $params);
-        }
+        return [
+            'name'        => 'Compose a mail message',
+            'description' => 'Send a message to a recipient',
+            'icon'        => 'icon-envelope'
+        ];
     }
+
+    /**
+     * Field configuration for the action.
+     */
+    public function defineFormFields()
+    {
+        return 'fields.yaml';
+    }
+
+    public function getText()
+    {
+        $template = $this->host->template_name;
+
+        return 'Send a message using '.$template;
+    }
+
+    /**
+     * Triggers this action.
+     * @param array $params
+        * @return void
+        */
+    public function triggerAction($params)
+    {
+        $email = 'test@email.tld';
+        $template = $this->host->template_name;
+
+        Mail::sendTo($email, $template, $params);
+    }
+}
+```
 
 A form fields definition file is used to provide form fields when the action is established. These values are accessed from condition using the host model via the `$this->host` property.
 
-    # ===================================
-    #  Field Definitions
-    # ===================================
+```yaml
+# ===================================
+#  Field Definitions
+# ===================================
 
-    fields:
+fields:
 
-        template_name:
-            label: Template name
-            type: text
+    template_name:
+        label: Template name
+        type: text
+```
 
 An action may choose to provide no form fields by simply returning false from the `defineFormFields` method.
 
-    public function defineFormFields()
-    {
-        return false;
-    }
+```php
+public function defineFormFields()
+{
+    return false;
+}
+```
 
 ## Creating Condition classes
 
 A condition class should specify how it should appear in the user interface, providing a name, title and summary text. It also must declare an `isTrue` method for evaluating whether the condition is true or not.
 
-    class MyCondition extends \RainLab\Notify\Classes\ConditionBase
+```php
+class MyCondition extends \RainLab\Notify\Classes\ConditionBase
+{
+    /**
+     * Return either ConditionBase::TYPE_ANY or ConditionBase::TYPE_LOCAL
+     */
+    public function getConditionType()
     {
-        /**
-         * Return either ConditionBase::TYPE_ANY or ConditionBase::TYPE_LOCAL
-         */
-        public function getConditionType()
-        {
-            // If the condition should appear for all events
-            return ConditionBase::TYPE_ANY;
+        // If the condition should appear for all events
+        return ConditionBase::TYPE_ANY;
 
-            // If the condition should appear only for some events
-            return ConditionBase::TYPE_LOCAL;
-        }
-
-        /**
-         * Field configuration for the condition.
-         */
-        public function defineFormFields()
-        {
-            return 'fields.yaml';
-        }
-
-        public function getName()
-        {
-            return 'My condition is checked';
-        }
-
-        public function getTitle()
-        {
-            return 'My condition';
-        }
-
-        public function getText()
-        {
-            $value = $this->host->mycondition;
-
-            return 'My condition <span class="operator">is</span> '.$value;
-        }
-
-        /**
-         * Checks whether the condition is TRUE for specified parameters
-         * @param array $params
-         * @return bool
-         */
-        public function isTrue(&$params)
-        {
-            return true;
-        }
+        // If the condition should appear only for some events
+        return ConditionBase::TYPE_LOCAL;
     }
+
+    /**
+     * Field configuration for the condition.
+     */
+    public function defineFormFields()
+    {
+        return 'fields.yaml';
+    }
+
+    public function getName()
+    {
+        return 'My condition is checked';
+    }
+
+    public function getTitle()
+    {
+        return 'My condition';
+    }
+
+    public function getText()
+    {
+        $value = $this->host->mycondition;
+
+        return 'My condition <span class="operator">is</span> '.$value;
+    }
+
+    /**
+     * Checks whether the condition is TRUE for specified parameters
+     * @param array $params
+        * @return bool
+        */
+    public function isTrue(&$params)
+    {
+        return true;
+    }
+}
+```
 
 A form fields definition file is used to provide form fields when the condition is established. These values are accessed from condition using the host model via the `$this->host` property.
 
-    # ===================================
-    #  Field Definitions
-    # ===================================
+```yaml
+# ===================================
+#  Field Definitions
+# ===================================
 
-    fields:
+fields:
 
-        mycondition:
-            label: My condition
-            type: dropdown
-            options:
-                true: True
-                false: False
+    mycondition:
+        label: My condition
+        type: dropdown
+        options:
+            true: True
+            false: False
+```
 
 ## Model attribute condition classes
 
 Model attribute conditions are designed specially for applying conditions to sets of model attributes.
 
-    class UserAttributeCondition extends \RainLab\Notify\Classes\ModelAttributesConditionBase
+```php
+class UserAttributeCondition extends \RainLab\Notify\Classes\ModelAttributesConditionBase
+{
+    protected $modelClass = \RainLab\User\Models\User::class;
+
+    public function getGroupingTitle()
     {
-        protected $modelClass = \RainLab\User\Models\User::class;
-
-        public function getGroupingTitle()
-        {
-            return 'User attribute';
-        }
-
-        public function getTitle()
-        {
-            return 'User attribute';
-        }
-
-        /**
-         * Checks whether the condition is TRUE for specified parameters
-         * @param array $params Specifies a list of parameters as an associative array.
-         * @return bool
-         */
-        public function isTrue(&$params)
-        {
-            $hostObj = $this->host;
-
-            $attribute = $hostObj->subcondition;
-
-            if (!$user = array_get($params, 'user')) {
-                throw new ApplicationException('Error evaluating the user attribute condition: the user object is not found in the condition parameters.');
-            }
-
-            return parent::evalIsTrue($user);
-        }
+        return 'User attribute';
     }
+
+    public function getTitle()
+    {
+        return 'User attribute';
+    }
+
+    /**
+     * Checks whether the condition is TRUE for specified parameters
+     * @param array $params Specifies a list of parameters as an associative array.
+        * @return bool
+        */
+    public function isTrue(&$params)
+    {
+        $hostObj = $this->host;
+
+        $attribute = $hostObj->subcondition;
+
+        if (!$user = array_get($params, 'user')) {
+            throw new ApplicationException('Error evaluating the user attribute condition: the user object is not found in the condition parameters.');
+        }
+
+        return parent::evalIsTrue($user);
+    }
+}
+```
 
 An attributes definition file is used to specify which attributes should be included in the condition.
 
-    # ===================================
-    #  Condition Attribute Definitions
-    # ===================================
+```yaml
+# ===================================
+#  Condition Attribute Definitions
+# ===================================
 
-    attributes:
+attributes:
 
-        name:
+    name:
+        label: Name
+
+    email:
+        label: Email address
+
+    country:
+        label: Country
+        type: relation
+        relation:
+            model: RainLab\Location\Models\Country
             label: Name
-
-        email:
-            label: Email address
-
-        country:
-            label: Country
-            type: relation
-            relation:
-                model: RainLab\Location\Models\Country
-                label: Name
-                nameFrom: name
-                keyFrom: id
+            nameFrom: name
+            keyFrom: id
+```
 
 ## Save to database action
 
 There is a dedicated table in the database for storing events and their parameters. This table is accessed using the `RainLab\Notify\Models\Notification` model and can be referenced as a relation from your own models. In this example the `MyProject` model contains its own notification channel called `notifications`.
 
-    class MyProject extends Model
-    {
-        // ...
+```php
+class MyProject extends Model
+{
+    // ...
 
-        public $morphMany = [
-            'my_notifications' => [
-                \RainLab\Notify\Models\Notification::class,
-                'name' => 'notifiable'
-            ]
-        ];
-    }
+    public $morphMany = [
+        'my_notifications' => [
+            \RainLab\Notify\Models\Notification::class,
+            'name' => 'notifiable'
+        ]
+    ];
+}
+```
 
 This channel should be registered with the `RainLab\Notify\NotifyRules\SaveDatabaseAction` so it appears as a related object when selecting the action.
 
-        SaveDatabaseAction::extend(function ($action) {
-            $action->addTableDefinition([
-                'label'    => 'Project activity',
-                'class'    => MyProject::class,
-                'relation' => 'my_notifications',
-                'param'    => 'project'
-            ]);
-        });
+```php
+SaveDatabaseAction::extend(function ($action) {
+    $action->addTableDefinition([
+        'label'    => 'Project activity',
+        'class'    => MyProject::class,
+        'relation' => 'my_notifications',
+        'param'    => 'project'
+    ]);
+});
+```
 
 The **label** is shown as the related object, the **class** references the model class, the **relation** refers to the relation name. The **param** defines the parameter name, passed to the triggering event.
 
 So essentially if you pass a `project` to the event parameters, or if `project` is a global parameter, a notification model is created with the parameters stored in the `data` attribute. Equivalent to the following code:
 
-    $myproject->my_notifications()->create([
-        // ...
-        'data' => $params
-    ]);
+```php
+$myproject->my_notifications()->create([
+    // ...
+    'data' => $params
+]);
+```
 
 ## Dynamically adding conditions to events
 
 Events can be extended to include new local conditions. Simply add the condition class to the event `$conditions` array property.
 
-    UserActivatedEvent::extend(function($event) {
-        $event->conditions[] = \RainLab\UserPlus\NotifyRules\UserLocationAttributeCondition::class;
-    });
+```php
+UserActivatedEvent::extend(function($event) {
+    $event->conditions[] = \RainLab\UserPlus\NotifyRules\UserLocationAttributeCondition::class;
+});
+```

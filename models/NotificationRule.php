@@ -1,8 +1,9 @@
 <?php namespace RainLab\Notify\Models;
 
+use Lang;
 use Model;
-use ApplicationException;
 use RainLab\Notify\Classes\EventBase;
+use RainLab\Notify\Classes\ConditionBase;
 
 /**
  * Notification rule
@@ -68,11 +69,7 @@ class NotificationRule extends Model
         $params = $this->getEventObject()->getParams();
         $rootCondition = $this->rule_conditions->first();
 
-        if (!$rootCondition) {
-            throw new ApplicationException('Notification rule is missing a root condition!');
-        }
-
-        if (!$rootCondition->getConditionObject()->isTrue($params)) {
+        if ($rootCondition && !$rootCondition->getConditionObject()->isTrue($params)) {
             return false;
         }
 
@@ -119,7 +116,7 @@ class NotificationRule extends Model
         }
 
         $this->class_name = $class;
-        $this->event_name = array_get($this->eventDetails(), 'name', 'Unknown');
+        $this->event_name = Lang::get(array_get($this->eventDetails(), 'name', 'Unknown'));
         return true;
     }
 
@@ -204,7 +201,7 @@ class NotificationRule extends Model
             }
         }
 
-        return $dbRules;
+        return $results;
     }
 
     /**
@@ -253,6 +250,7 @@ class NotificationRule extends Model
         $newRule->class_name = array_get($preset, 'event');
         $newRule->forceSave();
 
+        // Add the actions
         foreach ($actions as $action) {
             $params = array_except($action, 'action');
 
@@ -261,6 +259,29 @@ class NotificationRule extends Model
             $newAction->notification_rule = $newRule;
             $newAction->fill($params);
             $newAction->forceSave();
+        }
+
+        // Add the conditions
+        $conditions = array_get($preset, 'conditions');
+        if (!$conditions || !is_array($conditions)) {
+            return $newRule;
+        }
+
+        // Create the root condition
+        $rootCondition = new RuleCondition();
+        $rootCondition->rule_host_type = ConditionBase::TYPE_ANY;
+        $rootCondition->class_name = $rootCondition->getRootConditionClass();
+        $rootCondition->notification_rule = $newRule;
+        $rootCondition->save();
+
+        // Add the sub conditions
+        foreach ($conditions as $condition) {
+            $params = array_except($condition, 'condition');
+            $newCondition = new RuleCondition();
+            $newCondition->class_name = array_get($condition, 'condition');
+            $newCondition->parent = $rootCondition;
+            $newCondition->fill($params);
+            $newCondition->forceSave();
         }
 
         return $newRule;
