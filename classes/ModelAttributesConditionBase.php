@@ -16,16 +16,16 @@ class ModelAttributesConditionBase extends ConditionBase
     protected $modelClass = null;
 
     protected $operators = [
-        'is' => 'is',
-        'is_not' => 'is not',
-        'equals_or_greater' => 'equals or greater than',
-        'equals_or_less' => 'equals or less than',
-        'contains' => 'contains',
-        'does_not_contain' => 'does not contain',
-        'greater' => 'greater than',
-        'less' => 'less than',
-        'one_of' => 'is one of',
-        'not_one_of' => 'is not one of'
+        'is' => /*is*/trans('rainlab.notify::lang.condition.is'),
+        'is_not' => /*is not*/trans('rainlab.notify::lang.condition.is_not'),
+        'equals_or_greater' => /*equals or greater than*/trans('rainlab.notify::lang.condition.equals_or_greater'),
+        'equals_or_less' => /*equals or less than*/trans('rainlab.notify::lang.condition.equals_or_less'),
+        'contains' => /*contains*/trans('rainlab.notify::lang.condition.contains'),
+        'does_not_contain' => /*does not contain*/trans('rainlab.notify::lang.condition.does_not_contain'),
+        'greater' => /*greater than*/trans('rainlab.notify::lang.condition.greater'),
+        'less' => /*less than*/trans('rainlab.notify::lang.condition.less'),
+        'one_of' => /*is one of*/trans('rainlab.notify::lang.condition.one_of'),
+        'not_one_of' => /*is not one of*/trans('rainlab.notify::lang.condition.not_one_of')
     ];
 
     protected $modelObj = null;
@@ -47,7 +47,7 @@ class ModelAttributesConditionBase extends ConditionBase
 
     public function initConfigData($host)
     {
-        $host->operator = 'is';
+        $host->operator = /*is*/trans('rainlab.notify::lang.condition.is');
     }
 
     public function setCustomData()
@@ -60,7 +60,7 @@ class ModelAttributesConditionBase extends ConditionBase
     //
 
     /**
-     * This function should return one of the `ConditionBase::TYPE_*` constants
+     * This function should return one of the `ConditionBase::TYPE_*` constants 
      * depending on a place where the condition is valid
      */
     public function getConditionType()
@@ -98,7 +98,7 @@ class ModelAttributesConditionBase extends ConditionBase
             $result = $this->getConditionTextPrefix($host, $attributes);
         }
         else {
-            $result = 'Unknown attribute';
+            $result = /*Unknown attribute*/trans('rainlab.notify::lang.condition.unknown_attribute');
         }
 
         $result .= ' <span class="operator">'.array_get($this->operators, $host->operator, $host->operator).'</span> ';
@@ -187,7 +187,7 @@ class ModelAttributesConditionBase extends ConditionBase
         $definitions = $this->listModelAttributeInfo();
 
         if (!isset($definitions[$attribute])) {
-            $options = ['none' => 'Unknown attribute selected'];
+            $options = ['none' => /*Unknown attribute selected*/trans('rainlab.notify::lang.condition.unknown_attribute_selected');];
         }
         else {
             $columnType = array_get($definitions[$attribute], 'type');
@@ -195,29 +195,29 @@ class ModelAttributesConditionBase extends ConditionBase
             if ($columnType != ConditionBase::CAST_RELATION) {
                 if ($columnType == ConditionBase::CAST_STRING) {
                     $options = [
-                        'is' => 'is',
-                        'is_not' => 'is not',
-                        'contains' => 'contains',
-                        'does_not_contain' => 'does not contain'
+                        'is' => /*is*/trans('rainlab.notify::lang.condition.is'),
+                        'is_not' => /*is not*/trans('rainlab.notify::lang.condition.is_not'),
+                        'contains' => /*contains*/trans('rainlab.notify::lang.condition.contains'),
+                        'does_not_contain' => /*does not contain*/trans('rainlab.notify::lang.condition.does_not_contain')
                     ];
                 }
                 else {
                     $options = [
-                        'is' => 'is',
-                        'is_not' => 'is not',
-                        'equals_or_greater' => 'equals or greater than',
-                        'equals_or_less' => 'equals or less than',
-                        'greater' => 'greater than',
-                        'less' => 'less than'
+                        'is' => /*is*/trans('rainlab.notify::lang.condition.is'),
+                        'is_not' => /*is not*/trans('rainlab.notify::lang.condition.is_not'),
+                        'equals_or_greater' => /*equals or greater than*/trans('rainlab.notify::lang.condition.equals_or_greater'),
+                        'equals_or_less' => /*equals or less than*/trans('rainlab.notify::lang.condition.equals_or_less'),
+                        'greater' => /*greater than*/trans('rainlab.notify::lang.condition.greater'),
+                        'less' => /*less than*/trans('rainlab.notify::lang.condition.less')
                     ];
                 }
             }
             else {
                 $options = [
-                    'is' => 'is',
-                    'is_not' => 'is not',
-                    'one_of' => 'is one of',
-                    'not_one_of' => 'is not one of'
+                    'is' => /*is*/trans('rainlab.notify::lang.condition.is'),
+                    'is_not' => /*is not*/trans('rainlab.notify::lang.condition.is_not'),
+                    'one_of' => /*is one of*/trans('rainlab.notify::lang.condition.one_of'),
+                    'not_one_of' => /*is not one of*/trans('rainlab.notify::lang.condition.not_one_of')
                 ];
             }
         }

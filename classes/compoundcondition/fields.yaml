@@ -4,11 +4,13 @@
 
 fields:
     condition_type:
-        label: Condition type
+        # Condition type
+        label: rainlab.notify::lang.condition.condition_type
         span: auto
         type: dropdown
 
     condition:
-        label: Required value
+        # Required value
+        label: rainlab.notify::lang.condition.condition
         span: auto
         type: dropdown

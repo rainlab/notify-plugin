@@ -13,14 +13,14 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
      */
     public function getTitle()
     {
-        return 'Compound condition';
+        return /*Compound condition*/trans('rainlab.notify::lang.condition.compound_condition');
     }
 
     public function getText()
     {
         $result = $this->host->condition_type == 0
-            ? 'ALL of subconditions should be '
-            : 'ANY of subconditions should be ';
+            ? /*ALL of subconditions should be */trans('rainlab.notify::lang.condition.subconditions_all')
+            : /*ANY of subconditions should be */trans('rainlab.notify::lang.condition.subconditions_any');
 
         $result .= $this->host->condition == 'false' ? 'FALSE' : 'TRUE';
 
@@ -33,7 +33,7 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
      */
     public function getJoinText()
     {
-        return $this->host->condition_type == 0 ? 'AND' : 'OR';
+        return $this->host->condition_type == 0 ? /*AND*/ trans('rainlab.notify::lang.condition.and'): /*OR*/trans('rainlab.notify::lang.condition.or');
     }
 
     /**
@@ -69,8 +69,8 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
     public function getConditionTypeOptions()
     {
         $options = [
-            '0' => 'ALL subconditions should meet the requirement',
-            '1' => 'ANY subconditions should meet the requirement'
+            '0' => /*ALL subconditions should meet the requirement*/trans('rainlab.notify::lang.condition.meet_all_subconditions'),
+            '1' => /*ANY subconditions should meet the requirement*/trans('rainlab.notify::lang.condition.meet_any_subconditions')
         ];
 
         return $options;

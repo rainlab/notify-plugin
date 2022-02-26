@@ -5,17 +5,17 @@
 fields:
 
     subcondition:
-        label: Attribute
+        label: rainlab.notify::lang.context.subcondition
         span: auto
         type: dropdown
 
     operator:
-        label: Operator
+        label: rainlab.notify::lang.context.operator
         span: auto
         type: dropdown
         dependsOn: subcondition
 
     value:
-        label: Value
+        label: rainlab.notify::lang.context.value
         dependsOn: [subcondition, operator]
         type: dropdown

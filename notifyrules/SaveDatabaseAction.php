@@ -15,8 +15,8 @@ class SaveDatabaseAction extends ActionBase
     public function actionDetails()
     {
         return [
-            'name'        => 'Store in database',
-            'description' => 'Log event data in the notifications activity log',
+            'name'        => /*Store in database*/'rainlab.notify::lang.save_database.name',
+            'description' => /*Log event data in the notifications activity log*/'rainlab.notify::lang.save_database.description',
             'icon'        => 'icon-database'
         ];
     }
@@ -31,7 +31,7 @@ class SaveDatabaseAction extends ActionBase
         if ($this->host->related_object) {
             $label = array_get($this->getRelatedObjectOptions(), $this->host->related_object);
 
-            return 'Log event in the '.$label.' log';
+            return /*Log event in the :label log*/trans('rainlab.notify::lang.save_database.related_object_text',['label'=>$label]);
         }
 
         return parent::getText();
