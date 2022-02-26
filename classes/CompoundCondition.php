@@ -33,7 +33,9 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
      */
     public function getJoinText()
     {
-        return $this->host->condition_type == 0 ? /*AND*/ trans('rainlab.notify::lang.condition.and'): /*OR*/trans('rainlab.notify::lang.condition.or');
+        return $this->host->condition_type == 0
+            ? /*AND*/ trans('rainlab.notify::lang.condition.and')
+            : /*OR*/trans('rainlab.notify::lang.condition.or');
     }
 
     /**

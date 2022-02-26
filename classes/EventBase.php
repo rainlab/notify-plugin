@@ -37,9 +37,9 @@ class EventBase extends ExtensionBase implements EventInterface
     public function eventDetails()
     {
         return [
-            'name'        => /*Event*/trans('rainlab.notify::lang.event.name'),
+            'name' => /*Event*/trans('rainlab.notify::lang.event.name'),
             'description' => /*Event description*/trans('rainlab.notify::lang.event.description'),
-            'group'       => 'groupcode'
+            'group' => 'groupcode'
         ];
     }
 

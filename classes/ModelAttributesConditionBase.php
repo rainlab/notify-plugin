@@ -6,6 +6,9 @@ use SystemException;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
+/**
+ * ModelAttributesConditionBase
+ */
 class ModelAttributesConditionBase extends ConditionBase
 {
     /**
@@ -60,7 +63,7 @@ class ModelAttributesConditionBase extends ConditionBase
     //
 
     /**
-     * This function should return one of the `ConditionBase::TYPE_*` constants 
+     * This function should return one of the `ConditionBase::TYPE_*` constants
      * depending on a place where the condition is valid
      */
     public function getConditionType()

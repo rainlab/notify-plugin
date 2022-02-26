@@ -5,7 +5,7 @@ use October\Rain\Extension\ExtensionBase;
 use RainLab\Notify\Interfaces\Action as ActionInterface;
 
 /**
- * Notification action base class
+ * ActionBase class for notifications
  *
  * @package rainlab\notify
  * @author Alexey Bobkov, Samuel Georges
@@ -31,9 +31,9 @@ class ActionBase extends ExtensionBase implements ActionInterface
     public function actionDetails()
     {
         return [
-            'name'        => /*Action*/'rainlab.notify::lang.action.name',
+            'name' => /*Action*/'rainlab.notify::lang.action.name',
             'description' => /*Action description*/'rainlab.notify::lang.action.description',
-            'icon'        => 'icon-dot-circle-o'
+            'icon' => 'icon-dot-circle-o'
         ];
     }
 
