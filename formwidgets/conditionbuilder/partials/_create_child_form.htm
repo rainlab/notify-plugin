@@ -2,7 +2,7 @@
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>
-        <h4 class="modal-title">Condition</h4>
+        <h4 class="modal-title"><?= e(__('Condition')) ?></h4>
     </div>
 
     <?php if (!$this->fatalError): ?>
@@ -12,10 +12,10 @@
 
         <div class="modal-body">
             <div class="form-group condition-class">
-                <label>Condition</label>
+                <label><?= e(__('Condition')) ?></label>
                 <select
                     class="form-control custom-select"
-                    data-placeholder="Please select a condition"
+                    data-placeholder="<?= e(__('Please select a condition')) ?>"
                     name="condition_class">
                     <option value=""></option>
                     <?php foreach ($options as $name => $class): ?>
@@ -38,7 +38,7 @@
                 data-request="<?= $this->getEventHandler('onCreateCondition') ?>"
                 data-popup-load-indicator
                 class="btn btn-primary">
-                Create
+                <?= e(trans('backend::lang.form.create')) ?>
             </button>
             <button
                 type="button"

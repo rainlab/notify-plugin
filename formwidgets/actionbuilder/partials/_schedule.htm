@@ -1,7 +1,7 @@
 <div class="form-preview">
     <p>
         <i class="icon-clock-o"></i>
-        <?= e(trans('rainlab.notify::lang.action.schedule')) ?>
+        <?= e(__('Schedule')) ?>
     </p>
     <p>
         <?= $actionScheduleFormWidget->render() ?>
@@ -10,13 +10,13 @@
         <em>
             <?php if (in_array($queueDriver, ['sync', 'sqs'])): ?>
                 <i class="icon-warning"></i>
-                <?= e(trans('rainlab.notify::lang.action.schedule_unsupported')) ?>
+                <?= e(__('The configured queue driver does not support delayed execution.')) ?>
             <?php else: ?>
-                <?= e(trans('rainlab.notify::lang.action.schedule_notice')) ?>
+                <?= e(__('Note that scheduling might not work for certain queue driver configurations.')) ?>
             <?php endif ?>
         </em>
         <a target="_blank" href="https://octobercms.com/docs/services/queues#basic-usage">
-            <?= e(trans('rainlab.notify::lang.action.schedule_notice_more')) ?>
+            <?= e(__('Learn more')) ?>
         </a>
     </div>
 </div>

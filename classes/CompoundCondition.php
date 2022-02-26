@@ -8,19 +8,22 @@ use RainLab\Notify\Interfaces\CompoundCondition as CompoundConditionInterface;
 class CompoundCondition extends ConditionBase implements CompoundConditionInterface
 {
     /**
-     * Returns a condition title for displaying in the condition settings form
+     * getTitle returns a condition title for displaying in the condition settings form
      * @return string
      */
     public function getTitle()
     {
-        return 'Compound condition';
+        return 'Compound Condition';
     }
 
+    /**
+     * getText
+     */
     public function getText()
     {
         $result = $this->host->condition_type == 0
-            ? 'ALL of subconditions should be '
-            : 'ANY of subconditions should be ';
+            ? __('ALL of subconditions should be') . ' '
+            : __('ANY of subconditions should be') . ' ';
 
         $result .= $this->host->condition == 'false' ? 'FALSE' : 'TRUE';
 
@@ -28,7 +31,7 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
     }
 
     /**
-     * Returns the text to use when joining two rules within.
+     * getJoinText returns the text to use when joining two rules within.
      * @return string
      */
     public function getJoinText()
@@ -45,6 +48,9 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
         return [];
     }
 
+    /**
+     * defineFormFields
+     */
     public function defineFormFields()
     {
         return 'fields.yaml';
@@ -76,6 +82,9 @@ class CompoundCondition extends ConditionBase implements CompoundConditionInterf
         return $options;
     }
 
+    /**
+     * getChildOptions
+     */
     public function getChildOptions(array $options)
     {
         extract(array_merge([

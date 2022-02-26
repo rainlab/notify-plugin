@@ -2,7 +2,7 @@
 #  Form Behavior Config
 # ===================================
 
-name: rainlab.notify::lang.notifications.notification_rule
+name: Notification Rule
 form: $/rainlab/notify/models/notificationrule/fields.yaml
 modelClass: RainLab\Notify\Models\NotificationRule
 defaultRedirect: rainlab/notify/notifications

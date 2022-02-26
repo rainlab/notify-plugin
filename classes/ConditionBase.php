@@ -101,7 +101,7 @@ class ConditionBase extends ExtensionBase implements ConditionInterface
 
     public function getText()
     {
-        return 'Condition text';
+        return 'Condition Text';
     }
 
     /**
@@ -121,7 +121,7 @@ class ConditionBase extends ExtensionBase implements ConditionInterface
     }
 
     /**
-     * This function should return one of the `ConditionBase::TYPE_*` constants 
+     * This function should return one of the `ConditionBase::TYPE_*` constants
      * depending on a place where the condition is valid
      */
     public function getConditionType()

@@ -4,11 +4,11 @@
 
 fields:
     condition_type:
-        label: Condition type
+        label: Condition Type
         span: auto
         type: dropdown
 
     condition:
-        label: Required value
+        label: Required Value
         span: auto
         type: dropdown

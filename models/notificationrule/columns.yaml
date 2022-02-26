@@ -5,9 +5,9 @@
 columns:
 
     name:
-        label: rainlab.notify::lang.notifications.name
+        label: Name
         searchable: true
 
     code:
-        label: rainlab.notify::lang.notifications.code
+        label: Code
         searchable: true

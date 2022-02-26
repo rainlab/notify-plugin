@@ -37,9 +37,9 @@ class EventBase extends ExtensionBase implements EventInterface
     public function eventDetails()
     {
         return [
-            'name'        => 'Event',
+            'name' => 'Event',
             'description' => 'Event description',
-            'group'       => 'groupcode'
+            'group' => 'groupcode'
         ];
     }
 

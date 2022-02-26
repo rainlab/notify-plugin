@@ -31,9 +31,9 @@ class ActionBase extends ExtensionBase implements ActionInterface
     public function actionDetails()
     {
         return [
-            'name'        => 'Action',
-            'description' => 'Action description',
-            'icon'        => 'icon-dot-circle-o'
+            'name' => 'Action',
+            'description' => 'Action Description',
+            'icon' => 'icon-dot-circle-o'
         ];
     }
 

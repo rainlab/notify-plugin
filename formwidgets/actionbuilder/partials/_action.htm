@@ -8,8 +8,8 @@
             <span class="icon"><i class="<?= e($action->getActionIcon()) ?>"></i></span>
         </div>
         <a href="javascript:;" data-actions-settings>
-            <span class="title"><?= e($this->getCacheActionTitle($action)) ?></span>
-            <span class="comment"><?= e($this->getCacheActionText($action)) ?></span>
+            <span class="title"><?= e(__($this->getCacheActionTitle($action))) ?></span>
+            <span class="comment"><?= e(__($this->getCacheActionText($action))) ?></span>
         </a>
         <ul class="submenu">
             <li>

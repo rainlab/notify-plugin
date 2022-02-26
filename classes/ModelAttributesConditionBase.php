@@ -15,6 +15,9 @@ class ModelAttributesConditionBase extends ConditionBase
 
     protected $modelClass = null;
 
+    /**
+     * @var array operators
+     */
     protected $operators = [
         'is' => 'is',
         'is_not' => 'is not',
@@ -98,7 +101,7 @@ class ModelAttributesConditionBase extends ConditionBase
             $result = $this->getConditionTextPrefix($host, $attributes);
         }
         else {
-            $result = 'Unknown attribute';
+            $result = __('Unknown Attribute');
         }
 
         $result .= ' <span class="operator">'.array_get($this->operators, $host->operator, $host->operator).'</span> ';
@@ -170,11 +173,17 @@ class ModelAttributesConditionBase extends ConditionBase
     // Options
     //
 
+    /**
+     * getSubconditionOptions
+     */
     public function getSubconditionOptions()
     {
         return $this->listModelAttributes();
     }
 
+    /**
+     * getOperatorOptions
+     */
     public function getOperatorOptions()
     {
         $hostObj = $this->host;
@@ -257,7 +266,10 @@ class ModelAttributesConditionBase extends ConditionBase
         $keyFrom = $referenceInfo->primaryKey;
 
         // Determine if the model uses a tree trait
-        $treeTraits = ['October\Rain\Database\Traits\NestedTree', 'October\Rain\Database\Traits\SimpleTree'];
+        $treeTraits = [
+            \October\Rain\Database\Traits\NestedTree::class,
+            \October\Rain\Database\Traits\SimpleTree::class
+        ];
         $usesTree = count(array_intersect($treeTraits, class_uses($referenceModel))) > 0;
 
         $results = $referenceModel->get();

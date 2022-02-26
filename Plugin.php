@@ -5,36 +5,45 @@ use System\Classes\PluginBase;
 use System\Classes\SettingsManager;
 
 /**
- * The plugin.php file (called the plugin initialization script) defines the plugin information class.
+ * Plugin registration file
  */
 class Plugin extends PluginBase
 {
+    /**
+     * pluginDetails
+     */
     public function pluginDetails()
     {
         return [
-            'name'        => 'rainlab.notify::lang.plugin.name',
-            'description' => 'rainlab.notify::lang.plugin.description',
-            'author'      => 'Alexey Bobkov, Samuel Georges',
-            'icon'        => 'icon-bullhorn'
+            'name' => 'Notify',
+            'description' => 'Notification Services',
+            'author' => 'Alexey Bobkov, Samuel Georges',
+            'icon' => 'icon-bullhorn'
         ];
     }
 
+    /**
+     * registerSettings
+     */
     public function registerSettings()
     {
         return [
             'notifications' => [
-                'label'       => 'rainlab.notify::lang.notifications.menu_label',
-                'description' => 'rainlab.notify::lang.notifications.menu_description',
-                'category'    => SettingsManager::CATEGORY_NOTIFICATIONS,
-                'icon'        => 'icon-bullhorn',
-                'url'         => Backend::url('rainlab/notify/notifications'),
+                'label' => 'Notification Rules',
+                'description' => 'Manage the events and actions that trigger notifications.',
+                'category' => SettingsManager::CATEGORY_NOTIFICATIONS,
+                'icon' => 'icon-bullhorn',
+                'url' => Backend::url('rainlab/notify/notifications'),
                 'permissions' => ['rainlab.notify.manage_notifications'],
-                'order'       => 600,
-                'keywords'    => 'notify'
+                'order' => 600,
+                'keywords' => 'notify'
             ],
         ];
     }
 
+    /**
+     * registerNotificationRules
+     */
     public function registerNotificationRules()
     {
         return [
@@ -50,12 +59,15 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * registerPermissions
+     */
     public function registerPermissions()
     {
         return [
             'rainlab.notify.manage_notifications' => [
                 'tab' => SettingsManager::CATEGORY_NOTIFICATIONS,
-                'label' => 'rainlab.notify::lang.permissions.manage_notifications'
+                'label' => 'Notifications management'
             ],
         ];
     }
