@@ -1,0 +1,30 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    schedule_type:
+        type: dropdown
+        options:
+            disabled: None
+            delayed: Delay execution
+    schedule_delay:
+        type: number
+        span: left
+        trigger:
+            action: show
+            field: schedule_type
+            condition: value[delayed]
+    schedule_delay_factor:
+        type: dropdown
+        span: right
+        options:
+            1: Seconds
+            60: Minutes
+            3600: Hours
+            86400: Days
+            2592000: Months
+        trigger:
+            action: show
+            field: schedule_type
+            condition: value[delayed]

@@ -17,14 +17,20 @@
         <input type="hidden" name="current_action_data" value="<?= e(json_encode($this->getCacheActionDataPayload())) ?>" />
 
         <div class="modal-body">
-            <div class="row">
-                <div class="col-md-8">
-                    <?= $actionFormWidget->render() ?>
+            <?php if ($actionFormWidget): ?>
+                <div class="row">
+                    <div class="col-md-8">
+                        <?= $actionFormWidget->render() ?>
+                    </div>
+                    <div class="col-md-4">
+                        <?= $this->makePartial('available_tags') ?>
+
+                        <?= $this->makePartial('schedule') ?>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <?= $this->makePartial('available_tags') ?>
-                </div>
-            </div>
+            <?php else: ?>
+                <?= $this->makePartial('schedule') ?>
+            <?php endif ?>
         </div>
         <div class="modal-footer">
             <button
