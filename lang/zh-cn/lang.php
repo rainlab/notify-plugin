@@ -19,7 +19,7 @@ return [
         'rule_actions' => '新增通知规则',
         'is_enabled' => '活动',
         'description' => '描述',
-        'api_code' => 'API 代码'   
+        'api_code' => 'API 代码'
     ],
     'action' => [
         'name' => '动作',
