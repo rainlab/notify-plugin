@@ -1,5 +1,5 @@
 <?= Form::open(['id' => 'addRuleEventForm']) ?>
-    <div class="modal-header">
+    <div class="modal-header flex-row-reverse">
         <button type="button" class="close" data-dismiss="popup">&times;</button>
         <h4 class="modal-title"><?= e(__('Add Notification Rule')) ?></h4>
     </div>
@@ -9,21 +9,19 @@
             <p class="flash-message static error"><?= $fatalError ?></p>
         <?php else: ?>
 
-            <div class="list-preview">
-                <div class="control-simplelist is-selectable is-scrollable size-large" data-control="simplelist">
-                    <ul>
-                        <?php foreach ($events as $event): ?>
+            <div class="control-simplelist is-selectable is-scrollable size-large" data-control="simplelist">
+                <ul>
+                    <?php foreach ($events as $event): ?>
 
-                            <li>
-                                <a href="<?= Backend::url('rainlab/notify/notifications/create/'.$event->getEventIdentifier()) ?>">
-                                    <h5 class="heading"><?= e(trans($event->getEventName())) ?></h5>
-                                    <p class="description"><?= e(trans($event->getEventDescription())) ?></p>
-                                </a>
-                            </li>
+                        <li>
+                            <a href="<?= Backend::url('rainlab/notify/notifications/create/'.$event->getEventIdentifier()) ?>">
+                                <h5 class="heading"><?= e(trans($event->getEventName())) ?></h5>
+                                <p class="description"><?= e(trans($event->getEventDescription())) ?></p>
+                            </a>
+                        </li>
 
-                        <?php endforeach ?>
-                    </ul>
-                </div>
+                    <?php endforeach ?>
+                </ul>
             </div>
 
         <?php endif ?>
