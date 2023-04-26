@@ -129,6 +129,23 @@ class ExecutionContextCondition extends ConditionBase
             return array_get($params, 'appLocale') == $conditionValue;
         } else if ($attribute === 'environment') {
             return $conditionValue === \App::environment();
+        } else if ($attribute == 'context') {
+            $isBackend = (bool) array_get($params, 'isBackend');
+            $isConsole = (bool) array_get($params, 'isConsole');
+
+            switch ($conditionValue) {
+                case 'backend':
+                    return $isBackend;
+                case 'front':
+                    return !$isBackend && !$isConsole;
+                case 'console':
+                    return $isConsole;
+                default:
+                    return false;
+            }            
+        } else if ($attribute === 'theme') {
+            $theme = Theme::getActiveTheme();
+            return $theme && mb_strtolower($theme->getDirName()) == $conditionValue;
         }
 
         return false;
